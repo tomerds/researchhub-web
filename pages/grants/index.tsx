@@ -4,7 +4,6 @@ import { StyleSheet, css } from "aphrodite";
 import Error from "next/error";
 import { connect, useSelector } from "react-redux";
 import { ModalActions } from "~/redux/modals";
-import HubSelect from "~/components/Hubs/HubSelect";
 import Button from "~/components/Form/Button";
 import { breakpoints } from "~/config/themes/screen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +14,7 @@ import { Hub } from "~/config/types/hub";
 import { RootState } from "~/redux";
 import { isEmpty } from "~/config/utils/nullchecks";
 import { parseUser } from "~/config/types/root_types";
+import GrantSelect from "~/components/Grants/GrantSelect";
 
 type Props = {
   grants: any[];
@@ -40,18 +40,19 @@ const GrantsPage: NextPage<Props> = ({
   );
 
   const isModerator = currentUser?.moderator;
-  const isHubEditor = currentUser?.editorOf && currentUser?.editorOf.length > 0;
-  const [_hubs, _setHubs] = useState<Hub[]>(grants);
+  const isGrantEditor =
+    currentUser?.editorOf && currentUser?.editorOf.length > 0;
+  const [_grants, _setGrants] = useState<Hub[]>(grants);
 
   const addHub = (newHub) => {
-    _setHubs([newHub, ..._hubs]);
+    _setGrants([newHub, ..._grants]);
   };
 
   return (
     <div className={css(styles.container)}>
       <div className={css(styles.titleContainer)}>
-        <h1 className={css(styles.title) + " clamp2"}>Hubs</h1>
-        {(isModerator || isHubEditor) && (
+        <h1 className={css(styles.title) + " clamp2"}>Grants</h1>
+        {(isModerator || isGrantEditor) && (
           <Button
             customButtonStyle={styles.createHubButton}
             label={
@@ -61,7 +62,7 @@ const GrantsPage: NextPage<Props> = ({
                   // @ts-ignore icon prop works with FontAwesome
                   icon={faPlus}
                 />
-                <div>Create a Hub</div>
+                <div>Create a Grant</div>
               </div>
             }
             onClick={() => {
@@ -72,13 +73,12 @@ const GrantsPage: NextPage<Props> = ({
         )}
       </div>
       <div className={css(styles.description)}>
-        Hubs are collections of papers that are related to a specific topic. Use
-        this page to explore hubs.
+        Fund funding opportunities from grant organizations listed on this page.
       </div>
-      <HubSelect
+      <GrantSelect
         count={count}
-        hubs={_hubs}
-        canEdit={isModerator || isHubEditor}
+        grants={_grants}
+        canEdit={isModerator || isGrantEditor}
       />
       <AddHubModal addHub={addHub} />
     </div>
