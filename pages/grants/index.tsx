@@ -4,7 +4,6 @@ import { StyleSheet, css } from "aphrodite";
 import Error from "next/error";
 import { connect, useSelector } from "react-redux";
 import { ModalActions } from "~/redux/modals";
-import HubSelect from "~/components/Hubs/HubSelect";
 import Button from "~/components/Form/Button";
 import { breakpoints } from "~/config/themes/screen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +14,7 @@ import { Hub } from "~/config/types/hub";
 import { RootState } from "~/redux";
 import { isEmpty } from "~/config/utils/nullchecks";
 import { parseUser } from "~/config/types/root_types";
+import GrantSelect from "~/components/Grants/GrantSelect";
 
 type Props = {
   grants: any[];
@@ -75,7 +75,7 @@ const GrantsPage: NextPage<Props> = ({
         Hubs are collections of papers that are related to a specific topic. Use
         this page to explore hubs.
       </div>
-      <HubSelect
+      <GrantSelect
         count={count}
         hubs={_hubs}
         canEdit={isModerator || isHubEditor}
