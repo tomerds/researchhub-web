@@ -128,6 +128,32 @@ export const getLeftSidebarItemAttrs = ({
       onClick: silentEmptyFnc,
     },
     {
+      icon: ["/grants"].includes(pathname) ? (
+        <img
+          src="/static/rsc-icon-dark-blue.svg"
+          width="24"
+          height="24"
+          style={{
+            marginLeft: "-2px",
+          }}
+        />
+      ) : (
+        <img
+          src="/static/rsc-icon-gray.svg"
+          width="24"
+          height="24"
+          style={{
+            marginLeft: "-2px",
+          }}
+        />
+      ),
+      label: "Grants",
+      isActive: ["/grants"].includes(pathname),
+      isMinimized,
+      href: "/grants",
+      onClick: silentEmptyFnc,
+    },
+    {
       icon: <FontAwesomeIcon icon={faBook}></FontAwesomeIcon>,
       label: "Lab Notebook",
       isMinimized,
@@ -445,7 +471,11 @@ function RootLeftSidebar({
             <ALink href="/about" overrideStyle={formattedFooterTxtItem}>
               {"About"}
             </ALink>
-            <ALink href="https://docs.researchhub.com/" target="_blank" overrideStyle={formattedFooterTxtItem}>
+            <ALink
+              href="https://docs.researchhub.com/"
+              target="_blank"
+              overrideStyle={formattedFooterTxtItem}
+            >
               {"Docs"}
             </ALink>
             <ALink
