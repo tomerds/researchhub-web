@@ -234,7 +234,7 @@ const GrantSelect = ({
               <GrantCard
                 isSelected={h.id === selectedHub?.id}
                 descriptionStyle={styles.hubCardDescription}
-                hub={h}
+                grant={h}
                 handleClick={handleClick}
                 showCommentCount={showCommentCount}
                 canEdit={canEdit}
