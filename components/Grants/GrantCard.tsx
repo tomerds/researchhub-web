@@ -60,7 +60,7 @@ const GrantCard = ({
         {/* Change this to show total funded amount  */}
         <div className={css(styles.dataPoint)}>
           <ResearchCoinIcon height={15} width={15} />
-          <span>{numRSC} RSC</span>
+          <span className={css(styles.rscText)}>{numRSC} RSC</span>
         </div>
       </div>
     </>

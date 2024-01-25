@@ -77,7 +77,7 @@ const GrantsPage: NextPage<Props> = ({
       </div>
       <GrantSelect
         count={count}
-        hubs={_hubs}
+        grants={_hubs}
         canEdit={isModerator || isHubEditor}
       />
       <AddHubModal addHub={addHub} />
