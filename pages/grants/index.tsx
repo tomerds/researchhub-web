@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { getHubs } from "~/components/Hubs/api/fetchHubs";
+import { getGrants } from "~/components/Hubs/api/fetchHubs";
 import { StyleSheet, css } from "aphrodite";
 import Error from "next/error";
 import { connect, useSelector } from "react-redux";
@@ -17,7 +17,7 @@ import { isEmpty } from "~/config/utils/nullchecks";
 import { parseUser } from "~/config/types/root_types";
 
 type Props = {
-  hubs: any[];
+  grants: any[];
   errorCode?: number;
   count: number;
   openAddHubModal: Function;
@@ -26,7 +26,7 @@ type Props = {
 };
 
 const GrantsPage: NextPage<Props> = ({
-  hubs,
+  grants,
   errorCode,
   openAddHubModal,
   count,
@@ -41,7 +41,7 @@ const GrantsPage: NextPage<Props> = ({
 
   const isModerator = currentUser?.moderator;
   const isHubEditor = currentUser?.editorOf && currentUser?.editorOf.length > 0;
-  const [_hubs, _setHubs] = useState<Hub[]>(hubs);
+  const [_hubs, _setHubs] = useState<Hub[]>(grants);
 
   const addHub = (newHub) => {
     _setHubs([newHub, ..._hubs]);
@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
 export const getStaticProps: GetStaticProps = async (ctx) => {
   try {
     // @ts-ignore
-    const { hubs, count } = await getHubs({});
+    const { hubs: grants, count } = await getGrants({});
 
     return {
       props: {
-        hubs,
+        grants,
         count,
       },
       revalidate: 600,
