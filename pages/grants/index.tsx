@@ -25,7 +25,7 @@ type Props = {
   maxPerRow?: number;
 };
 
-const HubsPage: NextPage<Props> = ({
+const GrantsPage: NextPage<Props> = ({
   hubs,
   errorCode,
   openAddHubModal,
@@ -75,7 +75,11 @@ const HubsPage: NextPage<Props> = ({
         Hubs are collections of papers that are related to a specific topic. Use
         this page to explore hubs.
       </div>
-      <HubSelect count={count} hubs={_hubs} canEdit={isModerator || isHubEditor} />
+      <HubSelect
+        count={count}
+        hubs={_hubs}
+        canEdit={isModerator || isHubEditor}
+      />
       <AddHubModal addHub={addHub} />
     </div>
   );
@@ -155,4 +159,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 const mapDispatchToProps = {
   openAddHubModal: ModalActions.openAddHubModal,
 };
-export default connect(null, mapDispatchToProps)(HubsPage);
+export default connect(null, mapDispatchToProps)(GrantsPage);
