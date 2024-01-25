@@ -27,9 +27,7 @@ export const getHubs = async ({
 export const getGrants = async ({}) => {
   const url = API.HUB({ category: 11 });
 
-  console.log("here");
-
-  const res = await fetch(url, API.GET_CONFIG())
+  return fetch(url, API.GET_CONFIG())
     .then(Helpers.checkStatus)
     .then(Helpers.parseJSON)
     .then(async (resp) => {
@@ -43,10 +41,6 @@ export const getGrants = async ({}) => {
     .catch((err) => {
       console.error(err);
     });
-
-  console.log("res", res);
-
-  return res;
 };
 
 export const getCategories = () => {
