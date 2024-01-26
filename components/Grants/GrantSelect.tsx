@@ -7,7 +7,6 @@ import Menu, { MenuOption } from "~/components/shared/GenericMenu";
 import { useEffect, useRef, useState } from "react";
 import { fetchHubSuggestions } from "~/components/SearchSuggestion/lib/api";
 import debounce from "lodash/debounce";
-import useWindow from "~/config/hooks/useWindow";
 import { breakpoints } from "~/config/themes/screen";
 import { HubSuggestion } from "~/components/SearchSuggestion/lib/types";
 import EditHubModal from "~/components/Modals/EditHubModal";
@@ -19,24 +18,24 @@ import { RectShape } from "react-placeholder/lib/placeholders";
 import GrantCard from "./GrantCard";
 
 type GrantSelectProps = {
-  hubs: any[];
+  grants: any[];
   errorCode?: number;
   count: number;
   handleClick?: (event) => void;
   withPagination?: boolean;
   maxCardsPerRow?: number;
-  selectedHub?: Hub;
+  selectedGrant?: Hub;
   canEdit?: boolean;
   preventLinkClick?: boolean;
 };
 
 const GrantSelect = ({
-  hubs,
+  grants,
   handleClick,
   count,
   withPagination = true,
   maxCardsPerRow,
-  selectedHub,
+  selectedGrant,
   canEdit,
   preventLinkClick = false,
 }: GrantSelectProps) => {
@@ -46,17 +45,15 @@ const GrantSelect = ({
     { label: "Name", value: "name" },
   ];
 
-  const [parsedHubs, setParsedHubs] = useState<Hub[]>(
-    hubs.map((hub) => parseHub(hub))
+  const [parsedGrants, setParsedGrants] = useState<Hub[]>(
+    grants.map((grant) => parseHub(grant))
   );
   const [sort, setSort] = useState<MenuOption>(sortOpts[0]);
   const [page, setPage] = useState<number>(1);
   const prevSortValue = useRef(sort);
   const [suggestions, setSuggestions] = useState<HubSuggestion[]>([]);
-  const [showCommentCount, setShowCommentCount] = useState(true);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-  const { width: winWidth, height: winHeight } = useWindow();
   const [noSuggestionsFound, setNoSuggestionsFound] = useState(false);
   const cardWidth =
     maxCardsPerRow && maxCardsPerRow > 0
@@ -77,37 +74,29 @@ const GrantSelect = ({
     });
   };
 
-  const setPageHubs = async (page) => {
+  const setPageGrants = async (page) => {
     setLoading(true);
     setQueryParam({ param: "page", value: page });
     // @ts-ignore
-    const { hubs } = await getHubs({
+    const { grants } = await getHubs({
       page,
       ordering: sort.value,
     });
-    const parsedHubs = hubs.map((hub) => parseHub(hub));
+    const parsedGrants = grants.map((grant) => parseHub(grant));
     setLoading(false);
-    setParsedHubs(parsedHubs);
+    setParsedGrants(parsedGrants);
   };
 
   function getQueryParam(name, url = window.location.href) {
     const params = new URL(url).searchParams;
     return params.get(name);
   }
-
-  useEffect(() => {
-    if (winWidth) {
-      const showCommentCount = (winWidth || 0) > breakpoints.medium.int;
-      setShowCommentCount(showCommentCount);
-    }
-  }, [winWidth]);
-
   useEffect(() => {
     const pageParam = getQueryParam("page");
     if (pageParam) {
       const page = parseInt(pageParam, 10);
       setPage(page);
-      setPageHubs(page);
+      setPageGrants(page);
     } else {
       setLoading(false);
     }
@@ -139,24 +128,24 @@ const GrantSelect = ({
       const sortValueChanged = prevSortValue.current.value !== sort.value;
       if (sortValueChanged) {
         // @ts-ignore
-        const { hubs } = await getHubs({ ordering: sort.value });
-        const parsedHubs = hubs.map((hub) => parseHub(hub));
-        setParsedHubs(parsedHubs);
+        const { hubs: grants } = await getHubs({ ordering: sort.value });
+        const parsedGrants = grants.map((grant) => parseHub(grant));
+        setParsedGrants(parsedGrants);
         prevSortValue.current = sort;
       }
     })();
   }, [sort]);
 
   const debouncedSetQuery = debounce(setQuery, 500);
-  let hubsToRender =
-    query.length > 0 ? suggestions.map((s) => s.hub) : parsedHubs;
+  let grantsToRender =
+    query.length > 0 ? suggestions.map((s) => s.hub) : parsedGrants;
 
-  if (selectedHub && !query.length) {
-    hubsToRender.unshift(selectedHub);
+  if (selectedGrant && !query.length) {
+    grantsToRender.unshift(selectedGrant);
 
     // remove duplicates
     const seen = new Set();
-    hubsToRender = hubsToRender.filter((el) => {
+    grantsToRender = grantsToRender.filter((el) => {
       const duplicate = seen.has(el.id);
       seen.add(el.id);
       return !duplicate;
@@ -165,22 +154,22 @@ const GrantSelect = ({
 
   const isMobileScreen = getIsOnMobileScreenSize();
 
-  const editHub = (newHub) => {
-    const newParsedHub = parseHub(newHub);
-    const newHubs = parsedHubs.map((hub) => {
-      if (newParsedHub.id === hub.id) {
-        return newParsedHub;
+  const editGrant = (newGrant) => {
+    const newParsedGrant = parseHub(newGrant);
+    const newGrants = parsedGrants.map((grant) => {
+      if (newParsedGrant.id === grant.id) {
+        return newParsedGrant;
       } else {
-        return hub;
+        return grant;
       }
     });
 
-    setParsedHubs(newHubs);
+    setParsedGrants(newGrants);
   };
 
   return (
     <div className={css(styles.container)}>
-      <EditHubModal editHub={editHub} />
+      <EditHubModal editHub={editGrant} />
       <div className={css(styles.searchAndFilters)}>
         <div className={css(styles.search)}>
           <FontAwesomeIcon
@@ -194,7 +183,7 @@ const GrantSelect = ({
             onChange={(e) => {
               debouncedSetQuery(e.target.value);
             }}
-            placeholder="Search hubs"
+            placeholder="Search grants"
           />
         </div>
         <Menu
@@ -222,21 +211,20 @@ const GrantSelect = ({
         <ReactPlaceholder
           ready={!loading}
           customPlaceholder={
-            <HubsPlaceholder maxCardsPerRow={maxCardsPerRow} />
+            <GrantsPlaceholder maxCardsPerRow={maxCardsPerRow} />
           }
         >
-          {hubsToRender.map((h) => (
+          {grantsToRender.map((h) => (
             <div
               className={css(!maxCardsPerRow && styles.hubCardWrapper)}
               style={{ width: cardWidth }}
               key={h.id}
             >
               <GrantCard
-                isSelected={h.id === selectedHub?.id}
+                isSelected={h.id === selectedGrant?.id}
                 descriptionStyle={styles.hubCardDescription}
-                hub={h}
+                grant={h}
                 handleClick={handleClick}
-                showCommentCount={showCommentCount}
                 canEdit={canEdit}
                 preventLinkClick={preventLinkClick}
               />
@@ -265,7 +253,7 @@ const GrantSelect = ({
             onChange={(event, page) => {
               const fetchHubs = async () => {
                 window.scrollTo({ top: 0 });
-                setPageHubs(page);
+                setPageGrants(page);
                 setPage(page);
                 // scroll to top
               };
@@ -278,7 +266,7 @@ const GrantSelect = ({
   );
 };
 
-const HubsPlaceholder = ({ maxCardsPerRow }) => {
+const GrantsPlaceholder = ({ maxCardsPerRow }) => {
   const cardWidth =
     maxCardsPerRow && maxCardsPerRow > 0
       ? `calc(${100 / maxCardsPerRow}% - 15px)`
@@ -287,7 +275,7 @@ const HubsPlaceholder = ({ maxCardsPerRow }) => {
   const numPlaceholder = new Array(12).fill(null);
   return (
     <div
-      className={"show-loading-animation" + " " + css(styles.hubsPlaceholder)}
+      className={"show-loading-animation" + " " + css(styles.grantsPlaceholder)}
     >
       {numPlaceholder.map((_, index) => {
         return (
@@ -314,7 +302,7 @@ const styles = StyleSheet.create({
       width: "calc(50% - 15px)",
     },
   },
-  hubsPlaceholder: {
+  grantsPlaceholder: {
     display: "flex",
     flexWrap: "wrap",
     gap: 20,

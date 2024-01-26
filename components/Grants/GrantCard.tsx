@@ -2,7 +2,6 @@ import HubTag from "~/components/Hubs/HubTag";
 import { Hub } from "~/config/types/hub";
 import { StyleSheet, css } from "aphrodite";
 import { PaperIcon } from "~/config/themes/icons";
-import { faComments } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import colors from "~/config/themes/colors";
 import Link from "next/link";
@@ -10,26 +9,25 @@ import { truncateText } from "~/config/utils/string";
 import { formatNumber } from "~/config/utils/number";
 import { faCheckCircle, faPenToSquare } from "@fortawesome/pro-light-svg-icons";
 import { useState } from "react";
-import EditHubModal from "../Modals/EditHubModal";
 import { ModalActions } from "~/redux/modals";
 import { connect } from "react-redux";
+import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
 
 interface Props {
-  hub: Hub;
+  grant: Hub;
   cardStyle?: any;
   descriptionStyle?: any;
   metadataStyle?: any;
   preventLinkClick?: boolean;
-  showCommentCount?: boolean;
   isSelected?: boolean;
   numberCharactersToShow?: number;
-  openEditHubModal: (boolean: boolean, hub) => void;
+  openEditHubModal: (boolean: boolean, grant) => void;
   canEdit?: boolean;
-  handleClick?: (hub) => void;
+  handleClick?: (grant) => void;
 }
 
 const GrantCard = ({
-  hub,
+  grant,
   cardStyle,
   descriptionStyle,
   handleClick,
@@ -37,18 +35,17 @@ const GrantCard = ({
   preventLinkClick,
   canEdit,
   openEditHubModal,
-  showCommentCount = true,
   isSelected = false,
   numberCharactersToShow = 150,
 }: Props) => {
-  const numPapers = formatNumber(hub.numDocs || 0);
-  const numComments = formatNumber(hub.numComments || 0);
-  const description = truncateText(hub.description, numberCharactersToShow);
+  const numGrants = formatNumber(grant.numDocs || 0);
+  const numRSC = 1250; // fetch foundation RSC ammount here
+  const description = truncateText(grant.description, numberCharactersToShow);
 
   const [hoverEditIcon, setHoverEditIcon] = useState(false);
   const grantCardContent = (
     <>
-      <HubTag hub={hub} preventLinkClick={preventLinkClick} />
+      <HubTag hub={grant} preventLinkClick={preventLinkClick} />
       <div className={css(styles.description, descriptionStyle)}>
         {description}
       </div>
@@ -57,19 +54,14 @@ const GrantCard = ({
           {/* @ts-ignore */}
           <PaperIcon height={13} width={14} />
           <span>
-            {numPapers === "1" ? `${numPapers} Paper` : `${numPapers} Papers`}
+            {numGrants === "1" ? `${numGrants} Grant` : `${numGrants} Grants`}
           </span>
         </div>
-        {showCommentCount && (
-          <div className={css(styles.dataPoint)}>
-            <FontAwesomeIcon icon={faComments} />
-            <span>
-              {numComments === "1"
-                ? `${numComments} Discussion`
-                : `${numComments} Discussions`}
-            </span>
-          </div>
-        )}
+        {/* Change this to show total funded amount  */}
+        <div className={css(styles.dataPoint)}>
+          <ResearchCoinIcon height={15} width={15} />
+          <span className={css(styles.rscText)}>{numRSC} RSC</span>
+        </div>
       </div>
     </>
   );
@@ -91,7 +83,7 @@ const GrantCard = ({
             hoverEditIcon && styles.hoverEditIcon
           )}
           onClick={() => {
-            openEditHubModal(true, hub);
+            openEditHubModal(true, grant);
           }}
           onMouseEnter={() => setHoverEditIcon(true)}
           onMouseLeave={() => setHoverEditIcon(false)}
@@ -100,11 +92,11 @@ const GrantCard = ({
         </div>
       )}
       {handleClick ? (
-        <div onClick={() => handleClick(hub)}>{grantCardContent}</div>
+        <div onClick={() => handleClick(grant)}>{grantCardContent}</div>
       ) : preventLinkClick ? (
         <div>{grantCardContent}</div>
       ) : (
-        <Link href={`/grants/${hub.slug}`} style={{ textDecoration: "none" }}>
+        <Link href={`/grants/${grant.slug}`} style={{ textDecoration: "none" }}>
           {grantCardContent}
         </Link>
       )}
@@ -181,6 +173,9 @@ const styles = StyleSheet.create({
     top: 0,
     padding: 8,
     borderRadius: "0px 4px 0px 4px",
+  },
+  rscText: {
+    color: "#F3A113",
   },
 });
 
