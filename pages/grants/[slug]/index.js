@@ -2,12 +2,14 @@ import { toTitleCase } from "~/config/utils/string";
 import Error from "next/error";
 import fetchHubFromSlug from "~/pages/hubs/api/fetchHubFromSlug";
 import Head from "~/components/Head";
-import HubPage from "~/components/Hubs/HubPage";
+import GrantPage from "~/components/Grants/GrantPage";
 
 function Index({ slug, hub, error, isLiveFeed }) {
   if (error) {
     return <Error statusCode={error.code} />;
   }
+
+  console.log("index", hub);
 
   return (
     <div>
@@ -23,7 +25,7 @@ function Index({ slug, hub, error, isLiveFeed }) {
             : "Discuss and Discover " + toTitleCase(slug)
         }
       />
-      <HubPage
+      <GrantPage
         hub={hub}
         slug={slug}
         isLiveFeed={isLiveFeed}
@@ -45,6 +47,7 @@ export async function getStaticProps(ctx) {
 
   try {
     hub = await fetchHubFromSlug({ slug: ctx.params.slug });
+    console.log("fetching", hub);
   } catch (err) {
     console.log("err", err);
     return {
