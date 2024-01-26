@@ -61,7 +61,6 @@ export type RhDocumentType =
   | "eln"
   | "hypothesis"
   | "paper"
-  | "grant"
   | "post"
   | "question"
   | "bounty"

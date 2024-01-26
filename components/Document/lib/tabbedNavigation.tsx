@@ -1,7 +1,12 @@
 import { NextRouter } from "next/router";
 import { PaperIcon, QuestionIcon } from "~/config/themes/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComments, faStar, faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faComments,
+  faStar,
+  faCircleCheck,
+  faClipboard,
+} from "@fortawesome/pro-solid-svg-icons";
 import ResearchCoinIcon from "~/components/Icons/ResearchCoinIcon";
 import { Tab } from "~/components/HorizontalTabBar";
 import colors from "~/config/themes/colors";
@@ -39,6 +44,11 @@ export const tabs: Array<Tab> = [
     label: "Peer Reviews",
     value: "reviews",
   },
+  {
+    icon: <FontAwesomeIcon icon={faClipboard} />,
+    label: "Proposals",
+    value: "proposals",
+  },
   // Disabled replicability since we were seeing a lot of spammy votes
   // and thought that it'd be a net-negative to have this on the platform.
   // Want to consider more quality/higher-value implementation before re-launching.
@@ -68,7 +78,10 @@ export const getTabs = ({
 
   if (isPost(document) && document.postType === "question") {
     _tabs = _tabs.filter(
-      (tab) => tab.value !== "reviews" && tab.value !== "conversation"
+      (tab) =>
+        tab.value !== "reviews" &&
+        tab.value !== "conversation" &&
+        tab.value !== "proposals"
     );
   }
   if (isPost(document) && document.postType === "preregistration") {
@@ -76,12 +89,15 @@ export const getTabs = ({
       (tab) =>
         tab.value !== "reviews" &&
         tab.value !== "replicability" &&
-        tab.value !== "bounties"
+        tab.value !== "bounties" &&
+        tab.value !== "proposals"
     );
   }
   if (!isPaper(document)) {
     // we only have replication prediction markets on papers
-    _tabs = _tabs.filter((tab) => tab.value !== "replicability");
+    _tabs = _tabs.filter(
+      (tab) => tab.value !== "replicability" && tab.value !== "proposals"
+    );
   }
 
   _tabs = withDocTypeTab({ tabs: _tabs, document });
@@ -163,6 +179,10 @@ const withPillContent = ({
       finalTabs.push({
         ...tab,
         pillContent: metadata.reviewSummary.count || undefined,
+      });
+    } else if (tab.value === "proposals") {
+      finalTabs.push({
+        ...tab,
       });
     } else if (tab.value === "replicability") {
       const pcnt = predMarketUtils.computeProbability(

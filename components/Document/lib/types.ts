@@ -28,12 +28,7 @@ export type DocumentFormat = {
   type: "pdf" | "latex";
   url: string;
 };
-export type DocumentType =
-  | "hypothesis"
-  | "paper"
-  | "post"
-  | "question"
-  | "grant";
+export type DocumentType = "hypothesis" | "paper" | "post" | "question";
 
 export type ContentInstance = {
   id: ID;
