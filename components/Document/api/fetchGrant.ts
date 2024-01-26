@@ -9,6 +9,8 @@ interface Props {
 
 const fetchGrant = ({ paperId }: Props): Promise<any> => {
   const url = API.PAPER({ paperId });
+
+  console.log(url);
   return fetch(url, API.GET_CONFIG())
     .then(Helpers.checkStatus)
     .then(Helpers.parseJSON)

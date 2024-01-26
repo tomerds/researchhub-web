@@ -17,7 +17,7 @@ const DocumentPageWithNoSlug: NextPage = ({}) => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  return sharedGetStaticProps({ ctx, documentType: "paper" });
+  return sharedGetStaticProps({ ctx, documentType: "grant" });
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
