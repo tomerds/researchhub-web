@@ -9,8 +9,6 @@ function Index({ slug, hub, error, isLiveFeed }) {
     return <Error statusCode={error.code} />;
   }
 
-  console.log("index", hub);
-
   return (
     <div>
       <Head
@@ -47,7 +45,6 @@ export async function getStaticProps(ctx) {
 
   try {
     hub = await fetchHubFromSlug({ slug: ctx.params.slug });
-    console.log("fetching", hub);
   } catch (err) {
     console.log("err", err);
     return {
