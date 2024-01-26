@@ -48,6 +48,8 @@ const GrantsPage: NextPage<Props> = ({
     _setGrants([newHub, ..._grants]);
   };
 
+  console.log(grants);
+
   return (
     <div className={css(styles.container)}>
       <div className={css(styles.titleContainer)}>

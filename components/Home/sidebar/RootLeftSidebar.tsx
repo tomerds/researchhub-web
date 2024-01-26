@@ -309,12 +309,12 @@ function RootLeftSidebar({
       attrs: RootLeftSidebarItemProps,
       ind: number
     ): ReactElement<typeof RootLeftSidebarItem> => (
-      <>
+      <div key={ind}>
         {attrs.label === "Lab Notebook" && !isMinimized && (
           <div className={css(styles.subheader)}>Tools</div>
         )}
         <RootLeftSidebarItem key={`${attrs.label}-${ind}`} {...attrs} />
-      </>
+      </div>
     )
   );
 

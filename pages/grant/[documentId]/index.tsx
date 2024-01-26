@@ -1,5 +1,4 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import sharedGetStaticProps from "~/components/Document/lib/sharedGetStaticProps";
+import { NextPage } from "next";
 
 const DocumentPageWithNoSlug: NextPage = ({}) => {
   return (
@@ -14,17 +13,6 @@ const DocumentPageWithNoSlug: NextPage = ({}) => {
       Loading...
     </div>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  return sharedGetStaticProps({ ctx, documentType: "grant" });
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
 };
 
 export default DocumentPageWithNoSlug;

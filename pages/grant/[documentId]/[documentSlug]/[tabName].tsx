@@ -1,11 +1,9 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import DocumentCommentsPage from "~/components/Document/pages/DocumentCommentsPage";
 import sharedGetStaticProps from "~/components/Document/lib/sharedGetStaticProps";
-import DocumentReplicationMarketPage from "~/components/Document/pages/DocumentReplicationMarketPage";
 
 interface Args {
   documentData?: any;
-  commentData?: any;
   errorCode?: number;
   tabName: string;
   metadata?: any;
@@ -17,36 +15,33 @@ const TabPage: NextPage<Args> = ({
   errorCode,
   metadata,
 }) => {
-  if (tabName === "replicability") {
-    return (
-      <DocumentReplicationMarketPage
-        documentData={documentData}
-        documentType="paper"
-        metadata={metadata}
-        tabName={tabName}
-        errorCode={errorCode}
-      />
-    );
-  }
-
   return (
     <DocumentCommentsPage
       documentData={documentData}
-      documentType="paper"
-      metadata={metadata}
+      documentType="post"
       tabName={tabName}
+      metadata={metadata}
       errorCode={errorCode}
     />
   );
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  return sharedGetStaticProps({ ctx, documentType: "paper" });
+  return sharedGetStaticProps({ ctx, documentType: "post" });
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [],
+    paths: [
+      //   {
+      //   params: {
+      //     documentType: 'post',
+      //     documentId: '1276082',
+      //     documentSlug: 'boundary-vector-cells-in-the-goldfish-central-telencephalon-encode-spatial-information',
+      //     tabName: 'conversation',
+      //   },
+      // },
+    ],
     fallback: true,
   };
 };
