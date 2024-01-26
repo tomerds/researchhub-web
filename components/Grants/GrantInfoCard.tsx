@@ -20,11 +20,15 @@ export default function GrantInfoCard({
 }: Props): ReactElement<"div"> | null {
   const { description, editor_permission_groups = [] } = hub ?? {};
 
-  // TODO: Look into how to use editor rights for owner rights
-  const editorProfiles = editor_permission_groups.map(
-    (editor_group: any): any => editor_group?.user?.author_profile
-  );
-  const doesUserOwnOrg = true;
+  const isUserHubEditor =
+    hub.editor_permission_groups.length > 0 &&
+    hub.editor_permission_groups
+      .map((p) => {
+        return p.content_type == 2 ? p.object_id : null;
+      })
+      .includes(hub.id);
+
+  console.log(isUserHubEditor);
 
   const parsedHub = parseHub(hub);
   const numPapers = parsedHub.numDocs || 0;
@@ -37,7 +41,7 @@ export default function GrantInfoCard({
         <div className={css(styles.titleContainer)}>
           <h1 className={css(styles.title) + " clamp2"}>{mainHeaderText}</h1>
         </div>
-        {doesUserOwnOrg ? (
+        {isUserHubEditor ? (
           <div>
             <NewPostButton />
           </div>

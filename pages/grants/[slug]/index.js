@@ -4,12 +4,10 @@ import fetchHubFromSlug from "~/pages/hubs/api/fetchHubFromSlug";
 import Head from "~/components/Head";
 import GrantPage from "~/components/Grants/GrantPage";
 
-function Index({ slug, hub, error, isLiveFeed }) {
+function Index({ slug, hub, error }) {
   if (error) {
     return <Error statusCode={error.code} />;
   }
-
-  console.log("index", hub);
 
   return (
     <div>
@@ -25,12 +23,7 @@ function Index({ slug, hub, error, isLiveFeed }) {
             : "Discuss and Discover " + toTitleCase(slug)
         }
       />
-      <GrantPage
-        hub={hub}
-        slug={slug}
-        isLiveFeed={isLiveFeed}
-        isHomePage={false}
-      />
+      <GrantPage hub={hub} slug={slug} />
     </div>
   );
 }
@@ -47,7 +40,6 @@ export async function getStaticProps(ctx) {
 
   try {
     hub = await fetchHubFromSlug({ slug: ctx.params.slug });
-    console.log("fetching", hub);
   } catch (err) {
     console.log("err", err);
     return {
