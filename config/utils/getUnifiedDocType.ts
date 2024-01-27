@@ -6,6 +6,7 @@ export type FEDocType =
   | "hypothesis"
   | "post"
   | "paper"
+  | "grant"
   | "question"
   | "bounties"
   | "bounty"
@@ -16,6 +17,7 @@ export type BEReturnType =
   | "hypothesis"
   | "paper"
   | "posts"
+  | "grant"
   | "grants"
   | "questions"
   | "question"
@@ -48,6 +50,7 @@ export function getBeDocumentModelName(
   const lowerCasedInput = (input ?? "").toLowerCase() ?? null;
   switch (lowerCasedInput) {
     case "question":
+    case "grant":
     case "discussion":
     case "post":
     case "posts":
@@ -69,6 +72,8 @@ export function getFEUnifiedDocType(
   switch (lowerCasedInput) {
     case "question":
       return "question";
+    case "grant":
+      return "grant";
     case "discussion":
     case "post":
     case "posts":

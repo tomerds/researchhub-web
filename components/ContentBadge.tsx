@@ -94,6 +94,18 @@ const ContentBadgeBase = ({
             </span>
             <span>Preregistration</span>
           </>
+        ) : contentType === "grant" ? (
+          <>
+            <span className={css(styles.icon, styles.rscIcon)}>
+              <ResearchCoinIcon
+                color={colors.BLACK(0.5)}
+                version={4}
+                height={15}
+                width={15}
+              />
+            </span>
+            <span>Grant</span>
+          </>
         ) : contentType === COMMENT_TYPES.DISCUSSION ||
           contentType === "comment" ? (
           <>
