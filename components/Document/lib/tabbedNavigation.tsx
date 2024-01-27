@@ -76,6 +76,8 @@ export const getTabs = ({
 
   let _tabs = tabs;
 
+  console.log(document);
+
   if (isPost(document) && document.postType === "question") {
     _tabs = _tabs.filter(
       (tab) =>
@@ -84,6 +86,17 @@ export const getTabs = ({
         tab.value !== "proposals"
     );
   }
+
+  if (isPost(document) && document.postType === "grant") {
+    _tabs = _tabs.filter(
+      (tab) =>
+        tab.value !== "reviews" &&
+        tab.value !== "conversation" &&
+        tab.value !== "replicability" &&
+        tab.value !== "bounties"
+    );
+  }
+
   if (isPost(document) && document.postType === "preregistration") {
     _tabs = _tabs.filter(
       (tab) =>

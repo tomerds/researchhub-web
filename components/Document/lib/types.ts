@@ -230,6 +230,8 @@ export const parsePost = (raw: any): Post => {
     postType = "question";
   } else if (raw?.unified_document?.document_type === "PREREGISTRATION") {
     postType = "preregistration";
+  } else if (raw?.unified_document?.document_type === "GRANT") {
+    postType = "grant";
   }
 
   const parsed: Post = {

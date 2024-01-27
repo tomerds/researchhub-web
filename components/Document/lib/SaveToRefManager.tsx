@@ -29,7 +29,6 @@ interface Project {
 }
 
 function getFlatListOfProjectIds(projects: Project[]): number[] {
-  console.log("projects", projects);
   const ids: number[] = [];
 
   function extractIds(projects: Project[]) {
