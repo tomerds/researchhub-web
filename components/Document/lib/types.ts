@@ -132,7 +132,7 @@ export type Paper = GenericDocument & {
 };
 
 export type Post = GenericDocument & {
-  postType?: "publication" | "question" | "preregistration";
+  postType?: "publication" | "question" | "preregistration" | "grant";
   note?: Note;
   srcUrl: string;
   postHtml: TrustedHTML;

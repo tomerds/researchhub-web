@@ -1,5 +1,5 @@
 import { NextRouter } from "next/router";
-import { PaperIcon, QuestionIcon } from "~/config/themes/icons";
+import { PaperIcon, QuestionIcon, RSCIcon } from "~/config/themes/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComments,
@@ -76,8 +76,6 @@ export const getTabs = ({
 
   let _tabs = tabs;
 
-  console.log(document);
-
   if (isPost(document) && document.postType === "question") {
     _tabs = _tabs.filter(
       (tab) =>
@@ -86,17 +84,14 @@ export const getTabs = ({
         tab.value !== "proposals"
     );
   }
-
   if (isPost(document) && document.postType === "grant") {
     _tabs = _tabs.filter(
       (tab) =>
         tab.value !== "reviews" &&
-        tab.value !== "conversation" &&
         tab.value !== "replicability" &&
         tab.value !== "bounties"
     );
   }
-
   if (isPost(document) && document.postType === "preregistration") {
     _tabs = _tabs.filter(
       (tab) =>
@@ -108,9 +103,7 @@ export const getTabs = ({
   }
   if (!isPaper(document)) {
     // we only have replication prediction markets on papers
-    _tabs = _tabs.filter(
-      (tab) => tab.value !== "replicability" && tab.value !== "proposals"
-    );
+    _tabs = _tabs.filter((tab) => tab.value !== "replicability");
   }
 
   _tabs = withDocTypeTab({ tabs: _tabs, document });
@@ -134,6 +127,8 @@ const withDocTypeTab = ({
     ? "paper"
     : isPost(document) && document.postType === "question"
     ? "question"
+    : isPost(document) && document.postType === "grant"
+    ? "grant"
     : "post";
   let docTab: Tab;
 
@@ -149,6 +144,13 @@ const withDocTypeTab = ({
       // @ts-ignore
       icon: <PaperIcon height={18} width={18} />,
       label: "Post",
+      value: "",
+    };
+  } else if (type === "grant") {
+    docTab = {
+      // @ts-ignore
+      icon: <PaperIcon height={18} width={18} />,
+      label: "Grant",
       value: "",
     };
   } else {
