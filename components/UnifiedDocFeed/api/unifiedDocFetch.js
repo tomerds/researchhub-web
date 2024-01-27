@@ -100,13 +100,10 @@ export default function fetchUnifiedDocs(args) {
   })
     .then(async (res) => {
       const { count, next, results: fetchedUnifiedDocs = [] } = res ?? {};
-      console.log(fetchedUnifiedDocs);
       const voteFormattedDocs = await fetchUserVote(
         filterNull(fetchedUnifiedDocs),
         isLoggedIn
       );
-
-      console.log(voteFormattedDocs);
 
       onSuccess({
         count,

@@ -62,6 +62,7 @@ export type RhDocumentType =
   | "hypothesis"
   | "paper"
   | "post"
+  | "grant"
   | "question"
   | "bounty"
   | "researchhubpost"
