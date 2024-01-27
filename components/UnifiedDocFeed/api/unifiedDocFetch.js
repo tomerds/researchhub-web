@@ -46,6 +46,7 @@ export const fetchUserVote = (unifiedDocs = [], isLoggedIn, authToken) => {
           const currBeDocType = getBEUnifiedDocType(currUniDoc.document_type);
           const isPost =
             RESEARCHHUB_POST_DOCUMENT_TYPES.includes(currBeDocType);
+
           const docTypeOverride = isPost ? "posts" : currBeDocType;
           const targetDoc = isPost
             ? (currUniDoc.documents ?? [])[0] ?? null
@@ -99,10 +100,13 @@ export default function fetchUnifiedDocs(args) {
   })
     .then(async (res) => {
       const { count, next, results: fetchedUnifiedDocs = [] } = res ?? {};
+      console.log(fetchedUnifiedDocs);
       const voteFormattedDocs = await fetchUserVote(
         filterNull(fetchedUnifiedDocs),
         isLoggedIn
       );
+
+      console.log(voteFormattedDocs);
 
       onSuccess({
         count,

@@ -16,6 +16,7 @@ export type BEReturnType =
   | "hypothesis"
   | "paper"
   | "posts"
+  | "grants"
   | "questions"
   | "question"
   | "bounty"
@@ -33,6 +34,8 @@ export const RESEARCHHUB_POST_DOCUMENT_TYPES = [
   "discussion",
   "post",
   "posts",
+  "grant",
+  "grants",
   "question",
   "questions",
   "bounty",
@@ -98,6 +101,9 @@ export function getBEUnifiedDocType(
     case "post":
     case "posts":
       return "posts";
+    case "grant":
+    case "grants":
+      return "grants";
     case "hypothesis":
     case "meta-study":
       return "hypothesis";
