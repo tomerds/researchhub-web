@@ -46,6 +46,7 @@ const DocumentPostPageType: NextPage<Args> = ({
   const { revalidateDocument } = useCacheControl();
   const documentType = "post";
   const isQuestion = documentData?.document_type === "QUESTION";
+  const isGrant = documentData?.document_type === "GRANT";
 
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
@@ -156,50 +157,54 @@ const DocumentPostPageType: NextPage<Args> = ({
                 }}
               />
             </div>
-            <div style={{ maxWidth: viewerWidth, margin: "20px auto 0 auto" }}>
-              <div className={css(styles.subheader)}>
-                {isQuestion ? "Answers" : "Discussion"}
+            {!isGrant && (
+              <div
+                style={{ maxWidth: viewerWidth, margin: "20px auto 0 auto" }}
+              >
+                <div className={css(styles.subheader)}>
+                  {isQuestion ? "Answers" : "Discussion"}
+                </div>
+                <CommentFeed
+                  document={document}
+                  showFilters={false}
+                  showSort={false}
+                  tabName={"conversation"}
+                  initialFilter={null}
+                  editorType={COMMENT_TYPES.DISCUSSION}
+                  allowBounty={false}
+                  allowCommentTypeSelection={false}
+                  onCommentCreate={(comment) => {
+                    revalidateDocument();
+                    if (!documentMetadata) return;
+                    if (comment.bounties.length > 0) {
+                      setDocumentMetadata({
+                        ...documentMetadata,
+                        bounties: [
+                          comment.bounties[0],
+                          ...documentMetadata.bounties,
+                        ],
+                      });
+                    } else if (comment.commentType === COMMENT_TYPES.REVIEW) {
+                      setDocumentMetadata({
+                        ...documentMetadata,
+                        reviewCount: documentMetadata.reviewCount + 1,
+                      });
+                    } else {
+                      setDocumentMetadata({
+                        ...documentMetadata,
+                        discussionCount: documentMetadata.discussionCount + 1,
+                      });
+                    }
+                  }}
+                  onCommentUpdate={() => {
+                    revalidateDocument();
+                  }}
+                  onCommentRemove={(comment) => {
+                    revalidateDocument();
+                  }}
+                />
               </div>
-              <CommentFeed
-                document={document}
-                showFilters={false}
-                showSort={false}
-                tabName={"conversation"}
-                initialFilter={null}
-                editorType={COMMENT_TYPES.DISCUSSION}
-                allowBounty={false}
-                allowCommentTypeSelection={false}
-                onCommentCreate={(comment) => {
-                  revalidateDocument();
-                  if (!documentMetadata) return;
-                  if (comment.bounties.length > 0) {
-                    setDocumentMetadata({
-                      ...documentMetadata,
-                      bounties: [
-                        comment.bounties[0],
-                        ...documentMetadata.bounties,
-                      ],
-                    });
-                  } else if (comment.commentType === COMMENT_TYPES.REVIEW) {
-                    setDocumentMetadata({
-                      ...documentMetadata,
-                      reviewCount: documentMetadata.reviewCount + 1,
-                    });
-                  } else {
-                    setDocumentMetadata({
-                      ...documentMetadata,
-                      discussionCount: documentMetadata.discussionCount + 1,
-                    });
-                  }
-                }}
-                onCommentUpdate={() => {
-                  revalidateDocument();
-                }}
-                onCommentRemove={(comment) => {
-                  revalidateDocument();
-                }}
-              />
-            </div>
+            )}
           </div>
         </DocumentPageLayout>
       </DocumentContext.Provider>

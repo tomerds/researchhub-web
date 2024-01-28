@@ -189,6 +189,8 @@ function FeedCard({
   const feDocUrl = `/${
     formattedDocType === "question"
       ? "question"
+      : formattedDocType === "grant"
+      ? "grant"
       : RESEARCHHUB_POST_DOCUMENT_TYPES.includes(formattedDocType ?? "")
       ? "post"
       : formattedDocType

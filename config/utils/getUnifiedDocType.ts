@@ -6,6 +6,7 @@ export type FEDocType =
   | "hypothesis"
   | "post"
   | "paper"
+  | "grant"
   | "question"
   | "bounties"
   | "bounty"
@@ -16,6 +17,8 @@ export type BEReturnType =
   | "hypothesis"
   | "paper"
   | "posts"
+  | "grant"
+  | "grants"
   | "questions"
   | "question"
   | "bounty"
@@ -33,6 +36,8 @@ export const RESEARCHHUB_POST_DOCUMENT_TYPES = [
   "discussion",
   "post",
   "posts",
+  "grant",
+  "grants",
   "question",
   "questions",
   "bounty",
@@ -45,6 +50,7 @@ export function getBeDocumentModelName(
   const lowerCasedInput = (input ?? "").toLowerCase() ?? null;
   switch (lowerCasedInput) {
     case "question":
+    case "grant":
     case "discussion":
     case "post":
     case "posts":
@@ -66,6 +72,8 @@ export function getFEUnifiedDocType(
   switch (lowerCasedInput) {
     case "question":
       return "question";
+    case "grant":
+      return "grant";
     case "discussion":
     case "post":
     case "posts":
@@ -98,6 +106,9 @@ export function getBEUnifiedDocType(
     case "post":
     case "posts":
       return "posts";
+    case "grant":
+    case "grants":
+      return "grants";
     case "hypothesis":
     case "meta-study":
       return "hypothesis";
