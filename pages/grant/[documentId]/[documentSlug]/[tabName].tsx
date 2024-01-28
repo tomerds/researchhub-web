@@ -32,16 +32,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [
-      //   {
-      //   params: {
-      //     documentType: 'post',
-      //     documentId: '1276082',
-      //     documentSlug: 'boundary-vector-cells-in-the-goldfish-central-telencephalon-encode-spatial-information',
-      //     tabName: 'conversation',
-      //   },
-      // },
-    ],
+    paths: [],
     fallback: true,
   };
 };
