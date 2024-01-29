@@ -47,8 +47,8 @@ function validateFormField(fieldID: string, value: any): boolean {
       return (
         value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH
       );
-    case "hubs":
-      return value && value.length > 0;
+    // case "hubs":
+    //   return value && value.length > 0;
     case "text":
       return true;
     default:
@@ -103,7 +103,8 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
         title: mutableFormFields.title,
         textContent: mutableFormFields.text,
         editorContent: mutableFormFields.text,
-        hubIds: mutableFormFields.hubs.map((hub) => hub.id as ID),
+        // hubIds: mutableFormFields.hubs.map((hub) => hub.id as ID),
+        hubIds: ["431" as ID],
         postType: "QUESTION",
       },
       currentUser,
@@ -236,15 +237,17 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
       {!post && (
         <div className={css(styles.researchcoinContainer)}>
           <div className={css(styles.researchcoinTitle)}>
-            <div style={{ marginBottom: 10,}}>
+            <div style={{ marginBottom: 10 }}>
               <div className={css(styles.rscLabel)}>ResearchCoin Bounty</div>
               <p style={{ fontSize: 16, marginBottom: 0 }}>
                 Incentivize the community to answer your question by adding RSC.
               </p>
-
             </div>
             {withBounty ? (
-              <div onClick={() => setWithBounty(false)} style={{ marginTop: 8 }}>
+              <div
+                onClick={() => setWithBounty(false)}
+                style={{ marginTop: 8 }}
+              >
                 <Button size="small" customButtonStyle={styles.removeBountyBtn}>
                   <FontAwesomeIcon icon={faMinus} style={{ marginRight: 4 }} />
                   Remove Bounty
@@ -262,7 +265,10 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
           {withBounty && (
             <>
               <div
-                className={css(styles.bountyInputWrapper, bountyError && styles.withError)}
+                className={css(
+                  styles.bountyInputWrapper,
+                  bountyError && styles.withError
+                )}
               >
                 <BountyInput
                   handleBountyInputChange={handleBountyInputChange}
@@ -270,7 +276,7 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
               </div>
               {bountyError && (
                 <div className={css(styles.errorText)}>{bountyError}</div>
-              )}              
+              )}
             </>
           )}
         </div>

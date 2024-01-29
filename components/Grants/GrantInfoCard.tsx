@@ -1,13 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { breakpoints } from "~/config/themes/screen";
 import { css, StyleSheet } from "aphrodite";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { parseHub } from "~/config/types/hub";
 import { PaperIcon } from "~/config/themes/icons";
 import { faPenNib } from "@fortawesome/pro-solid-svg-icons";
 import NewPostButton from "../NewPostButton";
 import { useStore } from "react-redux";
 import isEqual from "lodash/isEqual";
+import Button from "../Form/Button";
+import BaseModal from "../Modals/BaseModal";
+import CreateGrantForm from "./CreateGrantForm";
 
 type Props = {
   hub: any;
@@ -35,17 +38,29 @@ export default function GrantInfoCard({
   const numComments = parsedHub.numComments || 0;
   const formattedDescription = (description || "").replace(/\.$/, "");
 
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <div className={css(styles.feedInfoCard)}>
       <div className={css(styles.detailRow)}>
         <div className={css(styles.titleContainer)}>
           <h1 className={css(styles.title) + " clamp2"}>{mainHeaderText}</h1>
         </div>
+        <BaseModal
+          closeOnOverlayClick={false}
+          hideClose={true}
+          isOpen={showForm}
+          children={
+            <div>
+              <CreateGrantForm onExit={() => setShowForm(false)} />
+            </div>
+          }
+        />
         {hubEditorGroup.some((x) =>
           isEqual(x, { hubId: hub.id, userId: userId })
         ) ? (
           <div>
-            <NewPostButton />
+            <Button onClick={() => setShowForm(true)}>New Grant</Button>
           </div>
         ) : null}
       </div>
