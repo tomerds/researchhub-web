@@ -1,4 +1,3 @@
-import HubTag from "~/components/Hubs/HubTag";
 import { Hub } from "~/config/types/hub";
 import { StyleSheet, css } from "aphrodite";
 import { PaperIcon } from "~/config/themes/icons";
@@ -12,6 +11,7 @@ import { useState } from "react";
 import { ModalActions } from "~/redux/modals";
 import { connect } from "react-redux";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
+import GrantTag from "./GrantTag";
 
 interface Props {
   grant: Hub;
@@ -45,7 +45,7 @@ const GrantCard = ({
   const [hoverEditIcon, setHoverEditIcon] = useState(false);
   const grantCardContent = (
     <>
-      <HubTag hub={grant} preventLinkClick={preventLinkClick} />
+      <GrantTag grant={grant} preventLinkClick={preventLinkClick} />
       <div className={css(styles.description, descriptionStyle)}>
         {description}
       </div>

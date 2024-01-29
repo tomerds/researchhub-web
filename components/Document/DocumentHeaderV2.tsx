@@ -164,7 +164,6 @@ const DocumentHeader = ({
                     slug={doc?.raw?.slug}
                   />
                 </div>
-
                 {!noLineItems && (
                   <div
                     className={css(
@@ -301,7 +300,6 @@ const DocumentHeader = ({
             )}
           </div>
         </div>
-
         <PaperTransactionModal
           // @ts-ignore
           paper={isPaper(doc) ? doc.raw : undefined}

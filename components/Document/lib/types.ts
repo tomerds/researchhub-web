@@ -132,7 +132,7 @@ export type Paper = GenericDocument & {
 };
 
 export type Post = GenericDocument & {
-  postType?: "publication" | "question" | "preregistration";
+  postType?: "publication" | "question" | "preregistration" | "grant";
   note?: Note;
   srcUrl: string;
   postHtml: TrustedHTML;
@@ -230,6 +230,8 @@ export const parsePost = (raw: any): Post => {
     postType = "question";
   } else if (raw?.unified_document?.document_type === "PREREGISTRATION") {
     postType = "preregistration";
+  } else if (raw?.unified_document?.document_type === "GRANT") {
+    postType = "grant";
   }
 
   const parsed: Post = {
