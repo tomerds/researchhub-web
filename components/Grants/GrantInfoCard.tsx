@@ -6,29 +6,29 @@ import { parseHub } from "~/config/types/hub";
 import { PaperIcon } from "~/config/themes/icons";
 import { faPenNib } from "@fortawesome/pro-solid-svg-icons";
 import NewPostButton from "../NewPostButton";
+import { useStore } from "react-redux";
+import isEqual from "lodash/isEqual";
 
 type Props = {
   hub: any;
   hubSubscribeButton?: ReactNode | null;
   isHomePage: boolean;
   mainHeaderText: string;
+  userId?: number;
 };
 
 export default function GrantInfoCard({
   hub,
+  userId,
   mainHeaderText,
 }: Props): ReactElement<"div"> | null {
   const { description, editor_permission_groups = [] } = hub ?? {};
 
-  const isUserHubEditor =
-    hub.editor_permission_groups.length > 0 &&
-    hub.editor_permission_groups
-      .map((p) => {
-        return p.content_type == 2 ? p.object_id : null;
-      })
-      .includes(hub.id);
-
-  console.log(isUserHubEditor);
+  const hubEditorGroup = hub.editor_permission_groups.map((p) => {
+    return p.content_type == 2
+      ? { hubId: p.object_id, userId: p.user.id }
+      : null;
+  });
 
   const parsedHub = parseHub(hub);
   const numPapers = parsedHub.numDocs || 0;
@@ -41,7 +41,9 @@ export default function GrantInfoCard({
         <div className={css(styles.titleContainer)}>
           <h1 className={css(styles.title) + " clamp2"}>{mainHeaderText}</h1>
         </div>
-        {isUserHubEditor ? (
+        {hubEditorGroup.some((x) =>
+          isEqual(x, { hubId: hub.id, userId: userId })
+        ) ? (
           <div>
             <NewPostButton />
           </div>

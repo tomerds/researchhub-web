@@ -24,6 +24,7 @@ class GrantPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.user ?? undefined,
       count: this.props.initialFeed?.count ?? 0,
       papers: this.props.initialFeed?.results?.data ?? [],
       noResults: this.props.initialFeed?.results?.no_results ?? faLessThanEqual,
@@ -253,7 +254,7 @@ class GrantPage extends Component {
 
   render() {
     const { feed } = this.state;
-    const { auth, hub, hubState, initialFeed, loggedIn } = this.props;
+    const { auth, hub, hubState, initialFeed, loggedIn, user } = this.props;
 
     if (auth.user.moderator && filterOptions.length < 5) {
       filterOptions.push(
@@ -281,6 +282,7 @@ class GrantPage extends Component {
           <div className={css(styles.mobileInfoTab)}></div>
           <div className={css(styles.row, styles.homeContentContainerBody)}>
             <GrantFeedContainer
+              user={user}
               feed={feed}
               hubName={hub.name}
               hubState={hubState}
