@@ -17,6 +17,7 @@ import {
 import { ContentInstance } from "~/components/Document/lib/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faClipboard,
   faComments,
   faMessagesQuestion,
   faStar,
@@ -26,6 +27,7 @@ export enum COMMENT_TYPES {
   DISCUSSION = "GENERIC_COMMENT",
   SUMMARY = "SUMMARY",
   REVIEW = "REVIEW",
+  PROPOSAL = "PROPOSAL",
   ANSWER = "ANSWER",
   ANNOTATION = "INNER_CONTENT_COMMENT",
   REPLICABILITY_COMMENT = "REPLICABILITY_COMMENT",
@@ -36,6 +38,11 @@ export const COMMENT_TYPE_OPTIONS = [
     value: COMMENT_TYPES.REVIEW,
     label: "Peer Review",
     icon: <FontAwesomeIcon icon={faStar} />,
+  },
+  {
+    value: COMMENT_TYPES.PROPOSAL,
+    label: "Proposal",
+    icon: <FontAwesomeIcon icon={faClipboard} />,
   },
   {
     value: COMMENT_TYPES.ANSWER,
@@ -52,6 +59,7 @@ export const COMMENT_TYPE_OPTIONS = [
 export enum COMMENT_FILTERS {
   BOUNTY = "BOUNTY",
   REVIEW = "REVIEW",
+  PROPOSAL = "PROPOSAL",
   ANNOTATION = "INNER_CONTENT_COMMENT",
 }
 

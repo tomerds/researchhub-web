@@ -257,6 +257,7 @@ const CommentFeed = ({
     bountyType: COMMENT_TYPES;
   }) => {
     let comment: CommentType;
+
     try {
       comment = await createCommentAPI({
         content,
@@ -441,6 +442,7 @@ const CommentFeed = ({
                 isNarrowWidthContext && styles.sectionForNarrowWidthContexts
               )}
             >
+              test
               <CommentEditor
                 key={editorId}
                 editorId={editorId}
