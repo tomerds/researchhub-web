@@ -22,6 +22,7 @@ import { createCommentAPI } from "../Comment/lib/api";
 import { COMMENT_TYPES } from "../Comment/lib/types";
 import { useAlert } from "react-alert";
 import { faMinus } from "@fortawesome/pro-regular-svg-icons";
+import { createOrUpdateGrantApi } from "./api/createGrant";
 
 const SimpleEditor = dynamic(() => import("../CKEditor/SimpleEditor"));
 
@@ -56,13 +57,14 @@ function validateFormField(fieldID: string, value: any): boolean {
   }
 }
 
-export type AskQuestionFormProps = {
+export type CreateGrantFormProps = {
+  hubId: string;
   onExit: (event?: SyntheticEvent) => void;
   user: any;
   post?: Post;
 };
 
-function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
+function CreateGrantForm({ post, user, onExit, hubId }: CreateGrantFormProps) {
   const router = useRouter();
   const [formErrors, setFormErrors] = useState<FormError>({
     hubs: false,
@@ -78,7 +80,6 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const currentUser = useCurrentUser();
   const documentContext = useContext(DocumentContext);
-  const [withBounty, setWithBounty] = useState<boolean>(false);
   const [bountyOffered, setBountyOffered] = useState<number>(0);
   const [bountyError, setBountyError] = useState<any>(null);
   const alert = useAlert();
@@ -97,15 +98,14 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
       setIsSubmitting(true);
     }
 
-    createOrUpdatePostApi({
+    createOrUpdateGrantApi({
       payload: {
         postId: post?.id,
         title: mutableFormFields.title,
         textContent: mutableFormFields.text,
         editorContent: mutableFormFields.text,
-        // hubIds: mutableFormFields.hubs.map((hub) => hub.id as ID),
-        hubIds: ["431" as ID],
-        postType: "QUESTION",
+        hubIds: [hubId as ID],
+        postType: "GRANT",
       },
       currentUser,
       onError: (_err: Error): void => setIsSubmitting(false),
@@ -123,45 +123,43 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
         } else {
           // Creating new post
           const { id, slug } = response ?? {};
-          const questionPath = `/question/${id}/${slug}`;
+          const questionPath = `/grant/${id}/${slug}`;
 
-          if (withBounty) {
-            try {
-              createCommentAPI({
-                content: {
-                  ops: [
-                    {
-                      insert: `Offering a bounty to the best answer to this question:\n${mutableFormFields.title}`,
+          try {
+            createCommentAPI({
+              content: {
+                ops: [
+                  {
+                    insert: `Offering a bounty to the best answer to this question:\n${mutableFormFields.title}`,
+                  },
+                  {
+                    insert: "\n",
+                    attributes: {
+                      blockquote: true,
                     },
-                    {
-                      insert: "\n",
-                      attributes: {
-                        blockquote: true,
-                      },
-                    },
-                  ],
-                },
-                documentType: "researchhubpost",
-                documentId: id,
-                bountyAmount: bountyOffered,
-                bountyType: COMMENT_TYPES.ANSWER,
-              });
-            } catch (error) {
-              alert.show(
-                {
-                  // @ts-ignore
-                  text: (
-                    <div>
-                      {`Your question was created but we couldn't create your bounty at this time.`}
-                    </div>
-                  ),
-                  buttonText: "OK",
-                  onClick: () => {},
-                },
-                { withCancel: false }
-              );
-            } finally {
-            }
+                  },
+                ],
+              },
+              documentType: "researchhubpost",
+              documentId: id,
+              bountyAmount: bountyOffered,
+              bountyType: COMMENT_TYPES.ANSWER,
+            });
+          } catch (error) {
+            alert.show(
+              {
+                // @ts-ignore
+                text: (
+                  <div>
+                    {`Your question was created but we couldn't create your bounty at this time.`}
+                  </div>
+                ),
+                buttonText: "OK",
+                onClick: () => {},
+              },
+              { withCancel: false }
+            );
+          } finally {
           }
 
           router.push(questionPath);
@@ -189,7 +187,7 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
       onSubmit={onFormSubmit}
     >
       <div className={css(formGenericStyles.text, styles.header)}>
-        {post ? "Update Question" : "Ask a Question"}
+        Create a Grant
         <a
           className={css(formGenericStyles.authorGuidelines)}
           style={{ color: colors.BLUE(1) }}
@@ -238,67 +236,40 @@ function AskQuestionForm({ post, user, onExit }: AskQuestionFormProps) {
         <div className={css(styles.researchcoinContainer)}>
           <div className={css(styles.researchcoinTitle)}>
             <div style={{ marginBottom: 10 }}>
-              <div className={css(styles.rscLabel)}>ResearchCoin Bounty</div>
+              <div className={css(styles.rscLabel)}>
+                ResearchCoin Grant<div className={css(styles.asterick)}>*</div>
+              </div>
               <p style={{ fontSize: 16, marginBottom: 0 }}>
-                Incentivize the community to answer your question by adding RSC.
+                Add funding total for the grant.
               </p>
             </div>
-            {withBounty ? (
-              <div
-                onClick={() => setWithBounty(false)}
-                style={{ marginTop: 8 }}
-              >
-                <Button size="small" customButtonStyle={styles.removeBountyBtn}>
-                  <FontAwesomeIcon icon={faMinus} style={{ marginRight: 4 }} />
-                  Remove Bounty
-                </Button>
-              </div>
-            ) : (
-              <div onClick={() => setWithBounty(true)}>
-                <Button size="small" customButtonStyle={styles.addBountyBtn}>
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 4 }} />
-                  Add Bounty
-                </Button>
-              </div>
-            )}
           </div>
-          {withBounty && (
-            <>
-              <div
-                className={css(
-                  styles.bountyInputWrapper,
-                  bountyError && styles.withError
-                )}
-              >
-                <BountyInput
-                  handleBountyInputChange={handleBountyInputChange}
-                />
-              </div>
-              {bountyError && (
-                <div className={css(styles.errorText)}>{bountyError}</div>
+          <>
+            <div
+              className={css(
+                styles.bountyInputWrapper,
+                bountyError && styles.withError
               )}
-            </>
-          )}
+            >
+              <BountyInput handleBountyInputChange={handleBountyInputChange} />
+            </div>
+            {bountyError && (
+              <div className={css(styles.errorText)}>{bountyError}</div>
+            )}
+          </>
         </div>
       )}
-      <HubSelectDropdown
-        selectedHubs={mutableFormFields.hubs}
-        required
-        onChange={(hubs) => {
-          handleOnChangeFields("hubs", hubs);
-        }}
-      />
       <div
         className={css(
           styles.buttonsContainer,
-          withBounty && bountyError && styles.buttonRowWithErrorText
+          bountyError && styles.buttonRowWithErrorText
         )}
       >
         <Button
           fullWidth
           customButtonStyle={styles.buttonStyle}
-          disabled={isSubmitting || (withBounty && bountyError)}
-          label={post ? "Update" : "Ask Question"}
+          disabled={isSubmitting || bountyError}
+          label={post ? "Update" : "Create Grant"}
           type="submit"
         />
       </div>
@@ -310,7 +281,7 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps)(AskQuestionForm);
+export default connect(mapStateToProps)(CreateGrantForm);
 
 const styles = StyleSheet.create({
   bountyInputWrapper: {
@@ -341,6 +312,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginTop: -5,
   },
+  asterick: {
+    color: colors.BLUE(1),
+  },
   buttonRowWithErrorText: {
     justifyContent: "space-between",
     alignItems: "center",
@@ -362,7 +336,6 @@ const styles = StyleSheet.create({
   rscLabel: {
     cursor: "pointer",
     display: "flex",
-    justifyContent: "space-between",
     fontWeight: 500,
     marginBottom: 6,
     color: "#232038",

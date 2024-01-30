@@ -52,7 +52,10 @@ export default function GrantInfoCard({
           isOpen={showForm}
           children={
             <div>
-              <CreateGrantForm onExit={() => setShowForm(false)} />
+              <CreateGrantForm
+                hubId={hub.id}
+                onExit={() => setShowForm(false)}
+              />
             </div>
           }
         />
