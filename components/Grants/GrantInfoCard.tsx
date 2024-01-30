@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { breakpoints } from "~/config/themes/screen";
 import { css, StyleSheet } from "aphrodite";
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import { parseHub } from "~/config/types/hub";
 import { PaperIcon } from "~/config/themes/icons";
 import { faPenNib } from "@fortawesome/pro-solid-svg-icons";
@@ -11,6 +11,7 @@ import isEqual from "lodash/isEqual";
 import Button from "../Form/Button";
 import BaseModal from "../Modals/BaseModal";
 import CreateGrantForm from "./CreateGrantForm";
+import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
 
 type Props = {
   hub: any;
@@ -18,13 +19,17 @@ type Props = {
   isHomePage: boolean;
   mainHeaderText: string;
   userId?: number;
+  unifiedDocuments: any;
 };
 
 export default function GrantInfoCard({
   hub,
   userId,
   mainHeaderText,
+  unifiedDocuments,
 }: Props): ReactElement<"div"> | null {
+  const [numRSC, setNumRSC] = useState(0);
+
   const { description, editor_permission_groups = [] } = hub ?? {};
 
   const hubEditorGroup = hub.editor_permission_groups.map((p) => {
@@ -33,9 +38,16 @@ export default function GrantInfoCard({
       : null;
   });
 
-  const parsedHub = parseHub(hub);
-  const numPapers = parsedHub.numDocs || 0;
-  const numComments = parsedHub.numComments || 0;
+  const numPapers = unifiedDocuments.length || 0;
+
+  useEffect(() => {
+    setNumRSC(
+      unifiedDocuments.reduce((accumulator, d) => {
+        return accumulator + parseInt(d.document_filter.bounty_total_amount);
+      }, 0)
+    );
+  }, [unifiedDocuments]);
+
   const formattedDescription = (description || "").replace(/\.$/, "");
 
   const [showForm, setShowForm] = useState(false);
@@ -80,15 +92,8 @@ export default function GrantInfoCard({
             </span>
           </div>
           <div className={css(styles.dataPoint)}>
-            <FontAwesomeIcon
-              icon={faPenNib}
-              style={{ color: "#918F9B", fontSize: 12 }}
-            />
-            <span>
-              {numComments === 1
-                ? `${numComments} Application`
-                : `${numComments} Applications`}
-            </span>
+            <ResearchCoinIcon height={15} width={15} />
+            <span className={css(styles.rscText)}>{numRSC} RSC</span>
           </div>
         </div>
       </div>
@@ -188,5 +193,8 @@ const styles = StyleSheet.create({
       // borderColor: "red",
       // color: "red",
     },
+  },
+  rscText: {
+    color: "#F3A113",
   },
 });
