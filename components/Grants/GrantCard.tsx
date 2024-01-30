@@ -39,8 +39,6 @@ const GrantCard = ({
   isSelected = false,
   numberCharactersToShow = 150,
 }: Props) => {
-  // const numGrants = formatNumber(grant.numDocs || 0);
-  // const numRSC = 1250; // fetch foundation RSC ammount here
   const description = truncateText(grant.description, numberCharactersToShow);
 
   const [numGrants, setNumGrants] = useState("0");
