@@ -1,0 +1,4 @@
+export const BOUNTY_DEFAULT_AMOUNT = 10000;
+export const BOUNTY_RH_PERCENTAGE = 9;
+export const MIN_RSC_REQUIRED = 1000;
+export const MAX_RSC_REQUIRED = 10000000;

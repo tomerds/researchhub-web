@@ -180,7 +180,11 @@ const DocumentHeader = ({
                       />
                     </ReferenceProjectsUpsertContextProvider>
                     {/* Don't show "Tip" if it's a preregistration */}
-                    {!(isPost(doc) && doc.postType === "preregistration") && (
+                    {!(
+                      isPost(doc) &&
+                      (doc.postType === "preregistration" ||
+                        doc.postType === "grant")
+                    ) && (
                       <PermissionNotificationWrapper
                         modalMessage="edit document"
                         permissionKey="UpdatePaper"
@@ -235,7 +239,11 @@ const DocumentHeader = ({
               {!noLineItems && (
                 <div className={css(styles.actionWrapper)}>
                   {/* Don't show "Tip" if it's a preregistration */}
-                  {!(isPost(doc) && doc.postType === "preregistration") && (
+                  {!(
+                    isPost(doc) &&
+                    (doc.postType === "preregistration" ||
+                      doc.postType === "grant")
+                  ) && (
                     <PermissionNotificationWrapper
                       modalMessage="edit document"
                       permissionKey="UpdatePaper"
