@@ -4,7 +4,7 @@ import fetchHubFromSlug from "~/pages/hubs/api/fetchHubFromSlug";
 import Head from "~/components/Head";
 import GrantPage from "~/components/Grants/GrantPage";
 
-function Index({ slug, hub, error, isLiveFeed }) {
+function Index({ slug, hub, error }) {
   if (error) {
     return <Error statusCode={error.code} />;
   }
@@ -23,12 +23,7 @@ function Index({ slug, hub, error, isLiveFeed }) {
             : "Discuss and Discover " + toTitleCase(slug)
         }
       />
-      <GrantPage
-        hub={hub}
-        slug={slug}
-        isLiveFeed={isLiveFeed}
-        isHomePage={false}
-      />
+      <GrantPage hub={hub} slug={slug} />
     </div>
   );
 }
