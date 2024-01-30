@@ -257,7 +257,6 @@ const CommentFeed = ({
     bountyType: COMMENT_TYPES;
   }) => {
     let comment: CommentType;
-
     try {
       comment = await createCommentAPI({
         content,
