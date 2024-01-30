@@ -65,6 +65,8 @@ import { parseHub } from "~/config/types/hub";
 import DocumentHubs from "~/components/Document/lib/DocumentHubs";
 import { Fundraise, parseFundraise } from "~/components/Fundraise/lib/types";
 import FundraiseCard from "~/components/Fundraise/FundraiseCard";
+import { timeTo } from "~/config/utils/dates";
+import dayjs from "dayjs";
 
 const DocumentViewer = dynamic(
   () => import("~/components/Document/DocumentViewer")
@@ -280,6 +282,8 @@ function FeedCard({
   const bountyAmount = documentFilter?.bounty_total_amount;
   const hasActiveBounty = documentFilter?.bounty_open;
 
+  const grant = formattedDocType === "grant";
+
   return (
     <div
       className={css(
@@ -339,7 +343,18 @@ function FeedCard({
                             {authors?.length > 0 && (
                               <span className={css(styles.metaDivider)}></span>
                             )}
+                            {grant ? "Posted: " : ""}
                             {parsedDoc?.createdDate}
+
+                            {grant ? (
+                              <>
+                                <br />
+                                Grant Expiring:{" "}
+                                {timeTo(dayjs(created_date).add(30, "day"))}
+                              </>
+                            ) : (
+                              <></>
+                            )}
                           </>
                         )}
                       </div>
