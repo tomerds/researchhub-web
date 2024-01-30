@@ -283,9 +283,6 @@ function FeedCard({
   const hasActiveBounty = documentFilter?.bounty_open;
 
   const grant = formattedDocType === "grant";
-  const grantExpiring = grant
-    ? timeTo(dayjs(created_date).add(30, "day"))
-    : undefined;
 
   return (
     <div
@@ -352,7 +349,8 @@ function FeedCard({
                             {grant ? (
                               <>
                                 <br />
-                                Grant Expiring: {grantExpiring}
+                                Grant Expiring:{" "}
+                                {timeTo(dayjs(created_date).add(30, "day"))}
                               </>
                             ) : (
                               <></>
