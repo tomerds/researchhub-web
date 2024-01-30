@@ -106,6 +106,10 @@ export const getTabs = ({
     _tabs = _tabs.filter((tab) => tab.value !== "replicability");
   }
 
+  if (isPaper(document)) {
+    _tabs = _tabs.filter((tab) => tab.value !== "proposals");
+  }
+
   _tabs = withDocTypeTab({ tabs: _tabs, document });
   _tabs = withHref({ tabs: _tabs, router });
   _tabs = withSelected({ tabs: _tabs, tabName: tabName as string });

@@ -10,7 +10,7 @@ import {
   faArrowAltUp,
 } from "@fortawesome/pro-light-svg-icons";
 import { COMMENT_FILTERS, COMMENT_TYPES } from "./types";
-import { faCheckCircle } from "@fortawesome/pro-solid-svg-icons";
+import { faCheckCircle, faClipboard } from "@fortawesome/pro-solid-svg-icons";
 
 export const commentTypes = [
   {
@@ -29,6 +29,14 @@ export const commentTypes = [
     placeholder: "What are your overall impressions of this paper?",
     // @ts-ignore
     icon: <FontAwesomeIcon icon={faStar} />,
+  },
+  {
+    label: "Proposal",
+    value: COMMENT_TYPES.PROPOSAL,
+    isDefault: false,
+    placeholder: "<h3>Submit a proposal to this grant<h3>",
+    // @ts-ignore
+    icon: <FontAwesomeIcon icon={faClipboard} />,
   },
   {
     label: "Summary",
@@ -62,6 +70,10 @@ export const filterOpts = [
   {
     label: "Peer reviews",
     value: COMMENT_FILTERS.REVIEW,
+  },
+  {
+    label: "Proposals",
+    value: COMMENT_FILTERS.PROPOSAL,
   },
 ];
 
