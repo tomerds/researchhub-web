@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/pro-light-svg-icons";
 import { AuthActions } from "~/redux/auth";
 import { breakpoints } from "~/config/themes/screen";
 import { checkUserVotesOnPapers, fetchURL } from "~/config/fetch";
@@ -7,39 +5,26 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import { faLessThanEqual } from "@fortawesome/free-solid-svg-icons";
 import { filterOptions, scopeOptions } from "~/config/utils/options";
-import { getEducationalCarouselElements } from "~/components/shared/carousel/presets/RhEducationalCarouselElements";
 import { getFragmentParameterByName } from "~/config/utils/parsers";
 import { Helpers } from "@quantfive/js-web-config";
 import { HubActions } from "~/redux/hub";
-import { INFO_TAB_EXIT_KEY } from "~/components/Banner/constants/exitable_banner_keys";
 import { MessageActions } from "~/redux/message";
-import { silentEmptyFnc } from "~/config/utils/nullchecks";
 import { StyleSheet, css } from "aphrodite";
 import API from "~/config/api";
-import colors from "~/config/themes/colors";
-import ExitableBanner from "~/components/Banner/ExitableBanner";
-import Head from "~/components/Head";
 import HomeRightSidebar from "~/components/Home/sidebar/HomeRightSidebar";
 
-import LiveFeed from "~/components/LiveFeed/LiveFeed";
-import RhCarousel from "../shared/carousel/RhCarousel";
 import Router from "next/router";
-import SubscribeButton from "../Home/SubscribeButton";
-import UnifiedDocFeedContainer from "~/components/UnifiedDocFeed/UnifiedDocFeedContainer";
-import { parseUser } from "~/config/types/root_types";
-import Link from "next/link";
-import RHLogo from "../Home/RHLogo";
-import SingleTypeUnifiedDocFeedContainer from "../UnifiedDocFeed/SingleTypeUnifiedDocFeedContainer";
 import GrantFeedContainer from "./GrantFeedContainer";
-import Button from "../Form/Button";
 
 const defaultFilter = filterOptions[0];
 const defaultScope = scopeOptions[0];
 
+// Should refactor this lots of unused code and old patterns
 class GrantPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.user ?? undefined,
       count: this.props.initialFeed?.count ?? 0,
       papers: this.props.initialFeed?.results?.data ?? [],
       noResults: this.props.initialFeed?.results?.no_results ?? faLessThanEqual,
@@ -56,15 +41,6 @@ class GrantPage extends Component {
       leaderboardTop: 0,
     };
   }
-
-  setScrollShadow = () => {
-    const height = document.getElementById("topbar").offsetHeight + 34;
-    this.setState({ leaderboardTop: height });
-  };
-
-  updateUserBannerPreference = () => {
-    this.props.setUserBannerPreference(false);
-  };
 
   componentDidMount() {
     const { isLoggedIn, initialFeed, hubState } = this.props;
@@ -278,7 +254,7 @@ class GrantPage extends Component {
 
   render() {
     const { feed } = this.state;
-    const { auth, hub, hubState, initialFeed, loggedIn } = this.props;
+    const { auth, hub, hubState, initialFeed, loggedIn, user } = this.props;
 
     if (auth.user.moderator && filterOptions.length < 5) {
       filterOptions.push(
@@ -306,6 +282,7 @@ class GrantPage extends Component {
           <div className={css(styles.mobileInfoTab)}></div>
           <div className={css(styles.row, styles.homeContentContainerBody)}>
             <GrantFeedContainer
+              user={user}
               feed={feed}
               hubName={hub.name}
               hubState={hubState}

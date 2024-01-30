@@ -47,9 +47,11 @@ function GrantFeedContainer({
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>(
     getPaginationInfoFromServerLoaded(serverLoadedData)
   );
+
   const [unifiedDocuments, setUnifiedDocuments] = useState<any>(
     serverLoadedData?.results || []
   );
+
   const [unifiedDocsLoading, setUnifiedDocsLoading] = useState(true);
   const { hasMore, isLoadingMore, localPage, page } = paginationInfo;
   const hubID = hub?.id ?? null;
@@ -159,6 +161,7 @@ function GrantFeedContainer({
   return (
     <div className={css(styles.unifiedDocFeedContainer)}>
       <GrantInfoCard
+        userId={auth?.user?.id}
         hub={hub}
         mainHeaderText={formatMainHeader({
           label: hubName,
