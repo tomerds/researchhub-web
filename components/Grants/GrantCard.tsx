@@ -7,11 +7,12 @@ import Link from "next/link";
 import { truncateText } from "~/config/utils/string";
 import { formatNumber } from "~/config/utils/number";
 import { faCheckCircle, faPenToSquare } from "@fortawesome/pro-light-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModalActions } from "~/redux/modals";
 import { connect } from "react-redux";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
 import GrantTag from "./GrantTag";
+import fetchUnifiedDocs from "../UnifiedDocFeed/api/unifiedDocFetch";
 
 interface Props {
   grant: Hub;
@@ -38,9 +39,41 @@ const GrantCard = ({
   isSelected = false,
   numberCharactersToShow = 150,
 }: Props) => {
-  const numGrants = formatNumber(grant.numDocs || 0);
-  const numRSC = 1250; // fetch foundation RSC ammount here
   const description = truncateText(grant.description, numberCharactersToShow);
+
+  const [numGrants, setNumGrants] = useState("0");
+  const [numRSC, setNumRSC] = useState(0);
+
+  // HAM 01/30/24: Temporary soluiton - I ~think~ this only gets number of
+  // grants and RSC from first page of pagination not all of them on hub
+  useEffect(() => {
+    const parseGrantHubNumbers = async () => {
+      fetchUnifiedDocs({
+        selectedFilters: {
+          isReady: true,
+          sort: "hot",
+          tags: [],
+          time: "today",
+          topLevel: "/",
+          type: "all",
+        },
+        hubID: 431,
+        isLoggedIn: true,
+        onError: () => console.log("error"),
+        onSuccess: ({ documents }): void => {
+          setNumGrants(formatNumber(documents.length));
+          setNumRSC(
+            documents.reduce((accumulator, d) => {
+              return (
+                accumulator + parseInt(d.document_filter.bounty_total_amount)
+              );
+            }, 0)
+          );
+        },
+      });
+    };
+    parseGrantHubNumbers();
+  }, []);
 
   const [hoverEditIcon, setHoverEditIcon] = useState(false);
   const grantCardContent = (

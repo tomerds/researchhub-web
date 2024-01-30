@@ -167,6 +167,7 @@ function GrantFeedContainer({
           label: hubName,
           isHomePage: false,
         })}
+        unifiedDocuments={unifiedDocuments}
       />
       {/* TODO: Maybe add a different menu here */}
       {/* <FeedMenu /> */}
