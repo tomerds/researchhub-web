@@ -200,8 +200,10 @@ const withPillContent = ({
         pillContent: metadata.reviewSummary.count || undefined,
       });
     } else if (tab.value === "proposals") {
+      const count = document.discussionCount - metadata.discussionCount;
       finalTabs.push({
         ...tab,
+        pillContent: count > 0 ? count : undefined,
       });
     } else if (tab.value === "replicability") {
       const pcnt = predMarketUtils.computeProbability(
