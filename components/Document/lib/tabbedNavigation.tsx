@@ -107,7 +107,6 @@ export const getTabs = ({
   }
 
   if (isPaper(document)) {
-    // we only have replication prediction markets on papers
     _tabs = _tabs.filter((tab) => tab.value !== "proposals");
   }
 

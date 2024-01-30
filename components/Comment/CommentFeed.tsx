@@ -442,7 +442,6 @@ const CommentFeed = ({
                 isNarrowWidthContext && styles.sectionForNarrowWidthContexts
               )}
             >
-              test
               <CommentEditor
                 key={editorId}
                 editorId={editorId}

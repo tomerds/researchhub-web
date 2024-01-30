@@ -169,7 +169,6 @@ export const createCommentAPI = async ({
     `${documentType}/${documentId}/comments/` +
       (bountyAmount ? "create_comment_with_bounty" : "create_rh_comment")
   );
-
   const response = await fetch(
     _url,
     API.POST_CONFIG(
