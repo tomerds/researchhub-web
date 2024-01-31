@@ -59,9 +59,23 @@ function useEffectForCommentTypeChange({
       if (!hasQuillContent({ quill })) {
         const delta: any = {
           ops: [
-            { insert: "Proposal Title: ", attributes: { bold: true } },
+            { insert: "Proposal Title:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
             { insert: "\n\n" },
-            { insert: "Proposal Abstract: ", attributes: { bold: true } },
+            { insert: "Introduction:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            { insert: "Materials/Methods:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            { insert: "Budget:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            {
+              insert: "Other:",
+              attributes: { bold: true },
+            },
+            { insert: " ", attributes: { bold: false } },
             { insert: "\n\n" },
           ],
         };
