@@ -72,7 +72,7 @@ function useEffectForCommentTypeChange({
             { insert: " ", attributes: { bold: false } },
             { insert: "\n\n" },
             {
-              insert: "Authors, Affiliations, References:",
+              insert: "Other:",
               attributes: { bold: true },
             },
             { insert: " ", attributes: { bold: false } },
