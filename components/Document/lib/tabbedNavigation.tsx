@@ -203,7 +203,7 @@ const withPillContent = ({
       const count = document.discussionCount - metadata.discussionCount;
       finalTabs.push({
         ...tab,
-        pillContent: count > 0 ? count : undefined,
+        pillContent: count > 1 ? count - 1 : undefined,
       });
     } else if (tab.value === "replicability") {
       const pcnt = predMarketUtils.computeProbability(
