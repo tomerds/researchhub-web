@@ -43,6 +43,8 @@ import DocumentPageTutorial from "./lib/DocumentPageTutorial";
 import FundraiseCard from "../Fundraise/FundraiseCard";
 import LinkToPublicPage from "../LinkToPublicPage";
 import { breakpoints } from "~/config/themes/screen";
+import GrantFundsCard from "../Grants/GrantFundsCard";
+import { BOUNTY_STATUS } from "~/config/types/bounty";
 const PaperTransactionModal = dynamic(
   () => import("~/components/Modals/PaperTransactionModal")
 );
@@ -301,6 +303,17 @@ const DocumentHeader = ({
                 />
               </div>
             )}
+            {
+              <div className={css(styles.fundraiseWrapper)}>
+                <GrantFundsCard
+                  metadata={metadata}
+                  amount={1000}
+                  status={BOUNTY_STATUS.OPEN}
+                  published={doc.createdDate}
+                  bountiesTotal={2000}
+                />
+              </div>
+            }
             {!noHorizontalTabBar && (
               <div className={css(styles.tabsWrapper)}>
                 <HorizontalTabBar tabs={tabs} />

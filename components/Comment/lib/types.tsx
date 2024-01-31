@@ -40,11 +40,6 @@ export const COMMENT_TYPE_OPTIONS = [
     icon: <FontAwesomeIcon icon={faStar} />,
   },
   {
-    value: COMMENT_TYPES.PROPOSAL,
-    label: "Proposal",
-    icon: <FontAwesomeIcon icon={faClipboard} />,
-  },
-  {
     value: COMMENT_TYPES.ANSWER,
     label: "Answer to Question",
     icon: <FontAwesomeIcon icon={faMessagesQuestion} />,

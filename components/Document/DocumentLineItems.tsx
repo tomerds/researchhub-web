@@ -88,9 +88,9 @@ const DocumentLineItems = ({
       ? [
           {
             title: "Due Date",
-            value: `${timeTo(
-              dayjs(document.publishedDate).add(30, "day")
-            )} to go`,
+            value: dayjs(document.publishedDate)
+              .add(30, "day")
+              .format("MMM D, YYYY"),
           },
         ]
       : []),
