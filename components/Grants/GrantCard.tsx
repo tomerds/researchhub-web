@@ -43,7 +43,6 @@ const GrantCard = ({
 
   const [numGrants, setNumGrants] = useState("0");
   const [numRSC, setNumRSC] = useState(0);
-
   // HAM 01/30/24: Temporary soluiton - I ~think~ this only gets number of
   // grants and RSC from first page of pagination not all of them on hub
   useEffect(() => {
@@ -57,7 +56,7 @@ const GrantCard = ({
           topLevel: "/",
           type: "all",
         },
-        hubID: 431,
+        hubID: grant.id,
         isLoggedIn: true,
         onError: () => console.log("error"),
         onSuccess: ({ documents }): void => {
