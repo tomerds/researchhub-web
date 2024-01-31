@@ -6,7 +6,7 @@ import { timeTo } from "~/config/utils/dates";
 import CommentAvatars from "../Comment/CommentAvatars";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { faClock } from "@fortawesome/pro-regular-svg-icons";
 import FundraiseContributorsModal from "./ContributorsModal";
 import Button from "../Form/Button";
@@ -21,6 +21,7 @@ import { breakpoints } from "~/config/themes/screen";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { DocumentMetadata } from "../Document/lib/types";
+import CreateBountyBtn from "../Bounty/CreateBountyBtn";
 
 export type GrantFundsCardProps = {
   published: string;
@@ -36,7 +37,7 @@ const GrantFundsCard = ({
     0
   );
 
-  console.log(metadata);
+  const router = useRouter();
 
   const grantorBounty = metadata?.bounties[0]?.amount; // don't know if this is correct but assuming they are ordered by creation data, could check on id or createdBy
   const status = metadata?.bounties[0]?.status;
@@ -136,14 +137,35 @@ const GrantFundsCard = ({
           ))}
       </div>
       <div className={css(styles.buttonWrapper)}>
-        <Button
-          // isLink={{ href: `/post/${postId}/${postSlug}` }}
-          size="small"
-          type="primary"
-          customButtonStyle={styles.customButtonStyle}
+        <CreateBountyBtn
+          onBountyAdd={() => router.reload()}
+          withPreview={false}
+          relatedItemId={comment.id}
+          relatedItemContentType={"rhcommentmodel"}
+          originalBounty={comment.bounties[0]}
         >
-          Apply
-        </Button>
+          <Button
+            // customButtonStyle={styles.contributeBtn}
+            // customLabelStyle={styles.contributeBtnLabel}
+            hideRipples={true}
+            size="small"
+          >
+            <div>
+              <FontAwesomeIcon icon={faPlus} />
+              {` `}
+
+              <>
+                Add RSC
+                <span
+                // className={css(styles.bountyBtnText)}
+                >
+                  {" "}
+                  to Bounty
+                </span>
+              </>
+            </div>
+          </Button>
+        </CreateBountyBtn>
       </div>
     </div>
   );
