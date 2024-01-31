@@ -59,6 +59,10 @@ export const feedTypeOpts = {
     value: "question",
     label: "Questions",
   },
+  grant: {
+    value: "grant",
+    label: "Grants",
+  },
   bounty: {
     value: "bounty",
     label: "Bounties",
@@ -77,6 +81,7 @@ export const sortOpts = {
       feedTypeOpts["paper"].value,
       feedTypeOpts["post"].value,
       feedTypeOpts["question"].value,
+      feedTypeOpts["grant"].value,
     ],
   },
   most_rsc: {
@@ -113,6 +118,7 @@ export const sortOpts = {
       feedTypeOpts["paper"].value,
       feedTypeOpts["post"].value,
       feedTypeOpts["question"].value,
+      feedTypeOpts["question"].value,
       feedTypeOpts["bounty"].value,
     ],
   },
@@ -127,6 +133,7 @@ export const sortOpts = {
       feedTypeOpts["paper"].value,
       feedTypeOpts["post"].value,
       feedTypeOpts["question"].value,
+      feedTypeOpts["question"].value,
       feedTypeOpts["bounty"].value,
     ],
   },
@@ -140,6 +147,7 @@ export const sortOpts = {
       feedTypeOpts["all"].value,
       feedTypeOpts["paper"].value,
       feedTypeOpts["post"].value,
+      feedTypeOpts["question"].value,
       feedTypeOpts["question"].value,
       feedTypeOpts["bounty"].value,
     ],
