@@ -132,10 +132,7 @@ const CommentFeed = ({
 
       const parsedComments = comments.map((raw: any) => parseComment({ raw }));
 
-      // Removing bounty comment from proposals tab for Grants
-      document.postType === "grant" && parsedComments[0].bounties.length > 0
-        ? setComments(parsedComments.slice(1))
-        : setComments(parsedComments);
+      setComments(parsedComments);
 
       setRootLevelCommentCount(count);
     } catch (error) {
