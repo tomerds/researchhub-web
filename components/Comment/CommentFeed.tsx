@@ -63,7 +63,6 @@ type Args = {
   allowCommentTypeSelection?: boolean;
   allowBounty?: boolean;
   tabName?: string;
-  metadata?: any;
 };
 
 const CommentFeed = ({
@@ -81,7 +80,6 @@ const CommentFeed = ({
   allowCommentTypeSelection = false,
   allowBounty = false,
   editorType = COMMENT_TYPES.DISCUSSION,
-  metadata = undefined,
 }: Args) => {
   const router = useRouter();
   const hasInitialComments = initialComments !== undefined;
