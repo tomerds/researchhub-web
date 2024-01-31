@@ -86,13 +86,21 @@ const GrantCard = ({
           {/* @ts-ignore */}
           <PaperIcon height={13} width={14} />
           <span>
-            {numGrants === "1" ? `${numGrants} Grant` : `${numGrants} Grants`}
+            {/* // HAM 01/31/24: Preregistration logic for demo as preregistration work isn't live -
+            delete later */}
+            {grant.slug === "preregistrations"
+              ? "6 Grants"
+              : numGrants === "1"
+              ? `${numGrants} Grant`
+              : `${numGrants} Grants`}
           </span>
         </div>
         {/* Change this to show total funded amount  */}
         <div className={css(styles.dataPoint)}>
           <ResearchCoinIcon height={15} width={15} />
-          <span className={css(styles.rscText)}>{numRSC} RSC</span>
+          <span className={css(styles.rscText)}>
+            {grant.slug === "preregistrations" ? "8750" : numRSC} RSC
+          </span>
         </div>
       </div>
     </>
@@ -128,9 +136,24 @@ const GrantCard = ({
       ) : preventLinkClick ? (
         <div>{grantCardContent}</div>
       ) : (
-        <Link href={`/grants/${grant.slug}`} style={{ textDecoration: "none" }}>
-          {grantCardContent}
-        </Link>
+        // HAM 01/31/24: logic for demo as preregistration work isn't live - delete later
+        <>
+          {grant.slug === "preregistrations" ? (
+            <Link
+              href={`https://www.researchhub.com/hubs/preregistration`}
+              style={{ textDecoration: "none" }}
+            >
+              {grantCardContent}
+            </Link>
+          ) : (
+            <Link
+              href={`/grants/${grant.slug}`}
+              style={{ textDecoration: "none" }}
+            >
+              {grantCardContent}
+            </Link>
+          )}
+        </>
       )}
     </div>
   );
