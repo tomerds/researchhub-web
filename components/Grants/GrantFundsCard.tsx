@@ -6,7 +6,7 @@ import { timeTo } from "~/config/utils/dates";
 import CommentAvatars from "../Comment/CommentAvatars";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { faClock } from "@fortawesome/pro-regular-svg-icons";
 import FundraiseContributorsModal from "./ContributorsModal";
 import Button from "../Form/Button";
@@ -21,20 +21,24 @@ import { breakpoints } from "~/config/themes/screen";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { DocumentMetadata } from "../Document/lib/types";
+import CreateBountyBtn from "../Bounty/CreateBountyBtn";
 import { fetchCommentsAPI } from "../Comment/lib/api";
 
 export type GrantFundsCardProps = {
   published: string;
   metadata: DocumentMetadata;
   id?: number;
+  onUpdateBounty: any;
 };
 
 const GrantFundsCard = ({
   metadata,
   published,
   id,
+  onUpdateBounty,
 }: GrantFundsCardProps): ReactElement => {
-  const [comment, setComment] = useState();
+  const [isFetching, setIsFetching] = useState(true);
+  const [comment, setComment] = useState<any>();
 
   useEffect(() => {
     const getComments = async () => {
@@ -51,7 +55,9 @@ const GrantFundsCard = ({
             new Date(b.createdDate).getTime()
         );
 
+      // probably needs a try statement
       setComment(comments[0]);
+      setIsFetching(false);
     };
 
     getComments();
@@ -159,16 +165,40 @@ const GrantFundsCard = ({
             </div>
           ))}
       </div>
-      <div className={css(styles.buttonWrapper)}>
-        <Button
-          // isLink={{ href: `/post/${postId}/${postSlug}` }}
-          size="small"
-          type="primary"
-          customButtonStyle={styles.customButtonStyle}
-        >
-          Apply
-        </Button>
-      </div>
+      {isFetching ? null : (
+        <div className={css(styles.buttonWrapper)}>
+          <CreateBountyBtn
+            isGrant={true}
+            onBountyAdd={onUpdateBounty}
+            withPreview={false}
+            relatedItemId={comment.id}
+            relatedItemContentType={"rhcommentmodel"}
+            originalBounty={comment.bounties[0]}
+          >
+            <Button
+              // customButtonStyle={styles.contributeBtn}
+              // customLabelStyle={styles.contributeBtnLabel}
+              hideRipples={true}
+              size="small"
+            >
+              <div>
+                <FontAwesomeIcon icon={faPlus} />
+                {` `}
+
+                <>
+                  Add RSC
+                  <span
+                  // className={css(styles.bountyBtnText)}
+                  >
+                    {" "}
+                    to Grant
+                  </span>
+                </>
+              </div>
+            </Button>
+          </CreateBountyBtn>
+        </div>
+      )}
     </div>
   );
 };
