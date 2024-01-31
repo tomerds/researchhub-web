@@ -311,6 +311,15 @@ const DocumentHeader = ({
                       metadata={metadata}
                       published={doc.createdDate}
                       id={doc.id}
+                      onUpdateBounty={(bounty) => {
+                        console.log("here", metadata.bounties);
+                        documentContext.updateMetadata({
+                          ...metadata,
+                          bounties: [...metadata.bounties, bounty],
+                        });
+
+                        revalidateDocument();
+                      }}
                     />
                   </div>
                 ) : (
