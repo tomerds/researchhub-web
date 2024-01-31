@@ -23,6 +23,7 @@ import { COMMENT_TYPES } from "../Comment/lib/types";
 import { useAlert } from "react-alert";
 import { faMinus } from "@fortawesome/pro-regular-svg-icons";
 import { createOrUpdateGrantApi } from "./api/createGrant";
+import GrantInput from "./GrantInput";
 
 const SimpleEditor = dynamic(() => import("../CKEditor/SimpleEditor"));
 
@@ -83,7 +84,7 @@ function CreateGrantForm({ post, user, onExit, hubId }: CreateGrantFormProps) {
   const [bountyOffered, setBountyOffered] = useState<number>(0);
   const [bountyError, setBountyError] = useState<any>(null);
   const alert = useAlert();
-  const handleBountyInputChange = ({ hasError, errorMsg, value }) => {
+  const handleGrantInputChange = ({ hasError, errorMsg, value }) => {
     setBountyOffered(value);
     setBountyError(errorMsg);
   };
@@ -130,7 +131,7 @@ function CreateGrantForm({ post, user, onExit, hubId }: CreateGrantFormProps) {
               content: {
                 ops: [
                   {
-                    insert: `Offering a bounty to the best answer to this question:\n${mutableFormFields.title}`,
+                    insert: `Offering funding for the best proposal submitted to the grant:\n${mutableFormFields.title}`,
                   },
                   {
                     insert: "\n",
@@ -251,7 +252,7 @@ function CreateGrantForm({ post, user, onExit, hubId }: CreateGrantFormProps) {
                 bountyError && styles.withError
               )}
             >
-              <BountyInput handleBountyInputChange={handleBountyInputChange} />
+              <GrantInput handleGrantInputChange={handleGrantInputChange} />
             </div>
             {bountyError && (
               <div className={css(styles.errorText)}>{bountyError}</div>

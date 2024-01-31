@@ -48,7 +48,10 @@ import VoteWidget from "~/components/VoteWidget";
 import { createVoteHandler } from "~/components/Vote/utils/createVoteHandler";
 import { unescapeHtmlString } from "~/config/utils/unescapeHtmlString";
 import { RESEARCHHUB_POST_DOCUMENT_TYPES } from "~/config/utils/getUnifiedDocType";
-import Bounty, { formatBountyAmount } from "~/config/types/bounty";
+import Bounty, {
+  BOUNTY_STATUS,
+  formatBountyAmount,
+} from "~/config/types/bounty";
 import ContentBadge from "~/components/ContentBadge";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -398,6 +401,7 @@ function FeedCard({
                       />
                     </div>
                   )}
+
                   <div className={css(styles.metadataContainer, styles.mobile)}>
                     <DocumentHubs
                       hubs={parsedHubs}

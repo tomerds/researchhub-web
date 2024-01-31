@@ -21,12 +21,14 @@ type CommentHeaderArgs = {
   authorProfile: AuthorProfile;
   comment: Comment;
   handleEdit: Function;
+  isGrant: boolean;
 };
 
 const CommentHeader = ({
   authorProfile,
   comment,
   handleEdit,
+  isGrant,
 }: CommentHeaderArgs) => {
   const openBounties = getOpenBounties({ comment });
   const closedBounties = getClosedBounties({ comment });
@@ -115,7 +117,9 @@ const CommentHeader = ({
                 )}
               </div>
               {hasAnyBounties ? (
-                <div className={css(styles.verb)}>{` opened a bounty`}</div>
+                <div className={css(styles.verb)}>
+                  {isGrant ? ` created a grant` : ` opened a bounty`}
+                </div>
               ) : comment.commentType === COMMENT_TYPES.REVIEW ? (
                 <div className={css(styles.verb)}>{` peer reviewed`}</div>
               ) : (

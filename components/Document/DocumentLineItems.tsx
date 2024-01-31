@@ -14,6 +14,8 @@ import { GenericDocument, Paper, isPaper, isPost } from "./lib/types";
 import StarInput from "../Form/StarInput";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { timeTo } from "~/config/utils/dates";
+import dayjs from "dayjs";
 
 const DocumentLineItems = ({
   document,
@@ -79,6 +81,16 @@ const DocumentLineItems = ({
           {
             title: "Published",
             value: document.publishedDate,
+          },
+        ]
+      : []),
+    ...(document.unifiedDocument.documentType === "grant"
+      ? [
+          {
+            title: "Due Date",
+            value: dayjs(document.publishedDate)
+              .add(30, "day")
+              .format("MMM D, YYYY"),
           },
         ]
       : []),

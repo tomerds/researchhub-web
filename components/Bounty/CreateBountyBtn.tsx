@@ -20,6 +20,7 @@ type Args = {
   children: any;
   originalBounty?: Bounty;
   overrideStyles?: any;
+  isGrant?: boolean;
 };
 
 function CreateBountyBtn({
@@ -30,6 +31,7 @@ function CreateBountyBtn({
   originalBounty,
   children,
   overrideStyles,
+  isGrant = false,
 }: Args): ReactElement {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,6 +51,7 @@ function CreateBountyBtn({
     >
       {/* @ts-ignore */}
       <BountyModal
+        isGrant={isGrant}
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
         handleBountyAdded={(bounty) => {

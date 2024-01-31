@@ -22,6 +22,9 @@ const DocumentBadges = ({ document, metadata }: Props) => {
     (total, tip) => tip.amount + total,
     0
   );
+
+  const docType = document?.unifiedDocument?.documentType;
+
   return (
     <div className={css(styles.badges)}>
       {openBountyAmount > 0 && (
@@ -31,7 +34,7 @@ const DocumentBadges = ({ document, metadata }: Props) => {
           bountyAmount={openBountyAmount}
           label={`${formatBountyAmount({
             amount: openBountyAmount,
-          })} Bounty`}
+          })} ${docType === "grant" ? "Grant" : "Bounty"}`}
         />
       )}
       {tippedAmount > 0 && (

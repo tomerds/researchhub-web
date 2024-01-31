@@ -42,6 +42,7 @@ type Props = {
   relatedItemContentType?: string;
   showMessage: Function;
   setMessage: Function;
+  isGrant?: boolean;
 };
 
 function BountyModal({
@@ -55,6 +56,7 @@ function BountyModal({
   originalBounty,
   relatedItemContentType,
   addBtnLabel = "Add Bounty",
+  isGrant = false,
 }: Props): ReactElement {
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -231,123 +233,133 @@ function BountyModal({
             </ReactTooltip>
 
             <div className={css(styles.rootContainer)}>
-              <div className={css(styles.values)}>
-                <div className={css(styles.offeringLine)}>
-                  <div
-                    className={css(styles.lineItemText, styles.offeringText)}
-                  >
-                    What type of bounty do you want to create?
-                  </div>
-                  <div className={css(styles.bountyTypes)}>
-                    {COMMENT_TYPE_OPTIONS.map(
-                      ({ value, label, icon }, index) => {
-                        return (
-                          <div
-                            className={css(
-                              styles.bountyTypeBadge,
-                              value === bountyType && styles.bountyBadgeActive
-                            )}
-                            onClick={() => setBountyType(value)}
-                          >
-                            <span className={css(styles.bountyTypeIcon)}>
-                              {icon}
-                            </span>
-                            {label}
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-
-                  <div className={css(styles.lineItem, styles.offeringLine)}>
+              {isGrant ? null : (
+                <div className={css(styles.values)}>
+                  <div className={css(styles.offeringLine)}>
                     <div
                       className={css(styles.lineItemText, styles.offeringText)}
                     >
-                      I am offering
+                      What type of bounty do you want to create?
                     </div>
-                    <div
-                      className={css(
-                        styles.lineItemValue,
-                        styles.offeringValue
-                      )}
-                    >
-                      <span
-                        className={css(styles.valueNumber, styles.valueInInput)}
-                      >
-                        <input
-                          className={css(styles.input)}
-                          type="number"
-                          onChange={handleBountyInputChange}
-                          value={offeredAmount + ""}
-                          pattern="\d*"
-                        />
-                      </span>
-                      <span className={css(styles.rscText)}>RSC</span>
-                    </div>
-                  </div>
-
-                  <div className={css(styles.lineItem, styles.platformFeeLine)}>
-                    <div className={css(styles.lineItemText)}>
-                      Platform Fee ({BOUNTY_RH_PERCENTAGE}%){` `}
-                      <span
-                        className={css(styles.tooltipIcon)}
-                        data-tip={""}
-                        data-for="commission"
-                      >
-                        {
-                          <FontAwesomeIcon
-                            icon={faInfoCircle}
-                          ></FontAwesomeIcon>
+                    <div className={css(styles.bountyTypes)}>
+                      {COMMENT_TYPE_OPTIONS.map(
+                        ({ value, label, icon }, index) => {
+                          return (
+                            <div
+                              className={css(
+                                styles.bountyTypeBadge,
+                                value === bountyType && styles.bountyBadgeActive
+                              )}
+                              onClick={() => setBountyType(value)}
+                            >
+                              <span className={css(styles.bountyTypeIcon)}>
+                                {icon}
+                              </span>
+                              {label}
+                            </div>
+                          );
                         }
-                      </span>
-                    </div>
-                    <div className={css(styles.lineItemValue)}>
-                      <span className={css(styles.valueNumber)}>
-                        <span>+ {researchHubAmount.toLocaleString()}</span>
-                      </span>
-                      <span className={css(styles.rscText)}>RSC</span>
-                    </div>
-                  </div>
-
-                  <div className={css(styles.lineItem, styles.netAmountLine)}>
-                    <ReactTooltip effect="solid" />
-                    <div className={css(styles.lineItemText)}>
-                      Total
-                      <span
-                        className={css(styles.tooltipIcon)}
-                        data-tip={""}
-                        data-for="net"
-                      >
-                        {
-                          <FontAwesomeIcon
-                            icon={faInfoCircle}
-                          ></FontAwesomeIcon>
-                        }
-                      </span>
-                    </div>
-                    <div
-                      className={css(
-                        styles.lineItemValue,
-                        styles.netAmountValue
                       )}
-                    >
-                      <span className={css(styles.valueNumber)}>
-                        <span>{totalAmount.toLocaleString()}</span>
-                        <ResearchCoinIcon
-                          overrideStyle={styles.rscIcon}
-                          width={20}
-                          height={20}
-                        />
-                      </span>
-                      <span className={css(styles.rscText)}>RSC</span>
                     </div>
-                  </div>
-                  <div className={css(styles.usdValue)}>
-                    ≈ {rscToUSDDisplay(totalAmount)}{" "}
-                    <span style={{ marginLeft: 22 }}>USD</span>
+
+                    <div className={css(styles.lineItem, styles.offeringLine)}>
+                      <div
+                        className={css(
+                          styles.lineItemText,
+                          styles.offeringText
+                        )}
+                      >
+                        I am offering
+                      </div>
+                      <div
+                        className={css(
+                          styles.lineItemValue,
+                          styles.offeringValue
+                        )}
+                      >
+                        <span
+                          className={css(
+                            styles.valueNumber,
+                            styles.valueInInput
+                          )}
+                        >
+                          <input
+                            className={css(styles.input)}
+                            type="number"
+                            onChange={handleBountyInputChange}
+                            value={offeredAmount + ""}
+                            pattern="\d*"
+                          />
+                        </span>
+                        <span className={css(styles.rscText)}>RSC</span>
+                      </div>
+                    </div>
+
+                    <div
+                      className={css(styles.lineItem, styles.platformFeeLine)}
+                    >
+                      <div className={css(styles.lineItemText)}>
+                        Platform Fee ({BOUNTY_RH_PERCENTAGE}%){` `}
+                        <span
+                          className={css(styles.tooltipIcon)}
+                          data-tip={""}
+                          data-for="commission"
+                        >
+                          {
+                            <FontAwesomeIcon
+                              icon={faInfoCircle}
+                            ></FontAwesomeIcon>
+                          }
+                        </span>
+                      </div>
+                      <div className={css(styles.lineItemValue)}>
+                        <span className={css(styles.valueNumber)}>
+                          <span>+ {researchHubAmount.toLocaleString()}</span>
+                        </span>
+                        <span className={css(styles.rscText)}>RSC</span>
+                      </div>
+                    </div>
+
+                    <div className={css(styles.lineItem, styles.netAmountLine)}>
+                      <ReactTooltip effect="solid" />
+                      <div className={css(styles.lineItemText)}>
+                        Total
+                        <span
+                          className={css(styles.tooltipIcon)}
+                          data-tip={""}
+                          data-for="net"
+                        >
+                          {
+                            <FontAwesomeIcon
+                              icon={faInfoCircle}
+                            ></FontAwesomeIcon>
+                          }
+                        </span>
+                      </div>
+                      <div
+                        className={css(
+                          styles.lineItemValue,
+                          styles.netAmountValue
+                        )}
+                      >
+                        <span className={css(styles.valueNumber)}>
+                          <span>{totalAmount.toLocaleString()}</span>
+                          <ResearchCoinIcon
+                            overrideStyle={styles.rscIcon}
+                            width={20}
+                            height={20}
+                          />
+                        </span>
+                        <span className={css(styles.rscText)}>RSC</span>
+                      </div>
+                    </div>
+                    <div className={css(styles.usdValue)}>
+                      ≈ {rscToUSDDisplay(totalAmount)}{" "}
+                      <span style={{ marginLeft: 22 }}>USD</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               <div className={css(infoSectionStyles.bountyInfo)}>
                 {originalBounty && (
                   <div className={css(infoSectionStyles.infoRow)}>

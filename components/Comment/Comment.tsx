@@ -293,6 +293,8 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
     commentTreeState.context === COMMENT_CONTEXTS.SIDEBAR ||
     commentTreeState.context === COMMENT_CONTEXTS.DRAWER;
 
+  const isGrant = document?.unifiedDocument.documentType === "grant";
+
   return (
     <div>
       <div>
@@ -324,6 +326,7 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
             {commentTreeState.context === COMMENT_CONTEXTS.GENERIC && (
               <div className={css(styles.genericCommentWrapperHeader)}>
                 <CommentHeader
+                  isGrant={isGrant}
                   authorProfile={comment.createdBy.authorProfile}
                   comment={comment}
                   handleEdit={handleEdit}
@@ -394,7 +397,8 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
                           style={{ fontSize: 13, marginRight: 5 }}
                           icon={faClock}
                         />
-                        {`Bounty expiring in ` +
+                        {(isGrant ? "Grant " : `Bounty `) +
+                          `expiring in ` +
                           timeTo(openBounties[0].expiration_date) +
                           `.  `}
                       </span>
@@ -404,8 +408,9 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
                         } to be eligible for bounty award.`}</>
                       </span>
                     </div>
-                    {currentUserIsOpenBountyCreator ? (
+                    {currentUserIsOpenBountyCreator || isGrant ? (
                       <CreateBountyBtn
+                        isGrant={isGrant}
                         onBountyAdd={onBountyAdd}
                         withPreview={false}
                         relatedItemId={comment.id}
@@ -432,7 +437,7 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
                                 )}
                               >
                                 {" "}
-                                to bounty
+                                to {isGrant ? "Grant" : "Bounty"}
                               </span>
                             </>
                           </div>

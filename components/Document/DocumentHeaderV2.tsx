@@ -43,6 +43,8 @@ import DocumentPageTutorial from "./lib/DocumentPageTutorial";
 import FundraiseCard from "../Fundraise/FundraiseCard";
 import LinkToPublicPage from "../LinkToPublicPage";
 import { breakpoints } from "~/config/themes/screen";
+import GrantFundsCard from "../Grants/GrantFundsCard";
+import { BOUNTY_STATUS } from "~/config/types/bounty";
 const PaperTransactionModal = dynamic(
   () => import("~/components/Modals/PaperTransactionModal")
 );
@@ -180,7 +182,11 @@ const DocumentHeader = ({
                       />
                     </ReferenceProjectsUpsertContextProvider>
                     {/* Don't show "Tip" if it's a preregistration */}
-                    {!(isPost(doc) && doc.postType === "preregistration") && (
+                    {!(
+                      isPost(doc) &&
+                      (doc.postType === "preregistration" ||
+                        doc.postType === "grant")
+                    ) && (
                       <PermissionNotificationWrapper
                         modalMessage="edit document"
                         permissionKey="UpdatePaper"
@@ -235,7 +241,11 @@ const DocumentHeader = ({
               {!noLineItems && (
                 <div className={css(styles.actionWrapper)}>
                   {/* Don't show "Tip" if it's a preregistration */}
-                  {!(isPost(doc) && doc.postType === "preregistration") && (
+                  {!(
+                    isPost(doc) &&
+                    (doc.postType === "preregistration" ||
+                      doc.postType === "grant")
+                  ) && (
                     <PermissionNotificationWrapper
                       modalMessage="edit document"
                       permissionKey="UpdatePaper"
@@ -293,6 +303,14 @@ const DocumentHeader = ({
                 />
               </div>
             )}
+            {
+              <div className={css(styles.fundraiseWrapper)}>
+                <GrantFundsCard
+                  metadata={metadata}
+                  published={doc.createdDate}
+                />
+              </div>
+            }
             {!noHorizontalTabBar && (
               <div className={css(styles.tabsWrapper)}>
                 <HorizontalTabBar tabs={tabs} />
