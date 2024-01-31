@@ -63,6 +63,7 @@ type Args = {
   allowCommentTypeSelection?: boolean;
   allowBounty?: boolean;
   tabName?: string;
+  metadata?: any;
 };
 
 const CommentFeed = ({
@@ -80,6 +81,7 @@ const CommentFeed = ({
   allowCommentTypeSelection = false,
   allowBounty = false,
   editorType = COMMENT_TYPES.DISCUSSION,
+  metadata = undefined,
 }: Args) => {
   const router = useRouter();
   const hasInitialComments = initialComments !== undefined;
@@ -436,76 +438,84 @@ const CommentFeed = ({
           </div>
         ) : (
           <>
-            <div
-              className={css(
-                styles.editorWrapper,
-                isNarrowWidthContext && styles.sectionForNarrowWidthContexts
-              )}
-            >
-              <CommentEditor
-                key={editorId}
-                editorId={editorId}
-                commentType={editorType}
-                handleSubmit={async (props) => {
-                  try {
-                    if (props.commentType === COMMENT_TYPES.REVIEW) {
-                      const reviewScore = getReviewCategoryScore({
-                        quillContents: props.content,
-                        category: "overall",
-                      });
+            {/* Remove ability to add new proposal once grant is awarded */}
+            {document.postType !== "grant" ||
+              (!comments.some((c) => c.awardedBountyAmount > 0) && (
+                <div
+                  className={css(
+                    styles.editorWrapper,
+                    isNarrowWidthContext && styles.sectionForNarrowWidthContexts
+                  )}
+                >
+                  <CommentEditor
+                    key={editorId}
+                    editorId={editorId}
+                    commentType={editorType}
+                    handleSubmit={async (props) => {
+                      try {
+                        if (props.commentType === COMMENT_TYPES.REVIEW) {
+                          const reviewScore = getReviewCategoryScore({
+                            quillContents: props.content,
+                            category: "overall",
+                          });
 
-                      if (reviewScore === 0) {
-                        throw new ErrorWithCode({
-                          message:
-                            "Please select a review score before submitting",
-                          code: "NO_REVIEW_SCORE",
-                        });
+                          if (reviewScore === 0) {
+                            throw new ErrorWithCode({
+                              message:
+                                "Please select a review score before submitting",
+                              code: "NO_REVIEW_SCORE",
+                            });
+                          }
+                        }
+
+                        let comment = (await handleRootCommentCreate(
+                          props
+                        )) as CommentType;
+                        if (comment.commentType === COMMENT_TYPES.REVIEW) {
+                          const review = await handleReviewCreate({
+                            commentId: comment.id,
+                            content: comment.content,
+                          });
+
+                          comment = { ...comment, review: review as Review };
+                        }
+                        onCreate({ comment });
+                        setEditorId(
+                          `${editorType}-new-thread-${genClientId()}`
+                        );
+                      } catch (error: any) {
+                        if (error instanceof ErrorWithCode) {
+                          dispatch(setMessage(error.message));
+                        } else {
+                          dispatch(
+                            setMessage(
+                              "Could not create a comment at this time"
+                            )
+                          );
+                          captureEvent({
+                            error,
+                            msg: `Failed to create ${props.commentType}`,
+                            data: {
+                              props,
+                            },
+                          });
+                        }
+                        // @ts-ignore
+                        dispatch(showMessage({ show: true, error: true }));
+                        throw error;
                       }
+                    }}
+                    allowBounty={allowBounty}
+                    author={currentUser?.authorProfile}
+                    allowCommentTypeSelection={allowCommentTypeSelection}
+                    editorStyleOverride={
+                      context === COMMENT_CONTEXTS.DRAWER
+                        ? styles.roundedEditor
+                        : null
                     }
-
-                    let comment = (await handleRootCommentCreate(
-                      props
-                    )) as CommentType;
-                    if (comment.commentType === COMMENT_TYPES.REVIEW) {
-                      const review = await handleReviewCreate({
-                        commentId: comment.id,
-                        content: comment.content,
-                      });
-
-                      comment = { ...comment, review: review as Review };
-                    }
-                    onCreate({ comment });
-                    setEditorId(`${editorType}-new-thread-${genClientId()}`);
-                  } catch (error: any) {
-                    if (error instanceof ErrorWithCode) {
-                      dispatch(setMessage(error.message));
-                    } else {
-                      dispatch(
-                        setMessage("Could not create a comment at this time")
-                      );
-                      captureEvent({
-                        error,
-                        msg: `Failed to create ${props.commentType}`,
-                        data: {
-                          props,
-                        },
-                      });
-                    }
-                    // @ts-ignore
-                    dispatch(showMessage({ show: true, error: true }));
-                    throw error;
-                  }
-                }}
-                allowBounty={allowBounty}
-                author={currentUser?.authorProfile}
-                allowCommentTypeSelection={allowCommentTypeSelection}
-                editorStyleOverride={
-                  context === COMMENT_CONTEXTS.DRAWER
-                    ? styles.roundedEditor
-                    : null
-                }
-              />
-            </div>
+                  />
+                </div>
+              ))}
             {(showSort || showFilters) && (
               <div className={css(styles.filtersWrapper)}>
                 {showFilters && (
