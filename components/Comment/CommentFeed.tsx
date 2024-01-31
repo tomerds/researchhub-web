@@ -133,6 +133,7 @@ const CommentFeed = ({
       const parsedComments = comments.map((raw: any) => parseComment({ raw }));
 
       setComments(parsedComments);
+
       setRootLevelCommentCount(count);
     } catch (error) {
       captureEvent({
@@ -505,7 +506,6 @@ const CommentFeed = ({
                 }
               />
             </div>
-
             {(showSort || showFilters) && (
               <div className={css(styles.filtersWrapper)}>
                 {showFilters && (
@@ -541,7 +541,6 @@ const CommentFeed = ({
                 )}
               </div>
             )}
-
             <div
               className={css(
                 isNarrowWidthContext && styles.sectionForNarrowWidthContexts
@@ -556,7 +555,6 @@ const CommentFeed = ({
                 handleFetchMore={fetchMore}
               />
             </div>
-
             {noResults && (
               <CommentEmptyState
                 height={context === COMMENT_CONTEXTS.SIDEBAR ? "60%" : "300px"}

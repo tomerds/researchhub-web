@@ -30,17 +30,22 @@ const CommentList = ({
   isFetching = false,
 }: Args) => {
   const commentTreeState = useContext(CommentTreeContext);
-  const _commentElems = comments.map((c) => (
-    <div
-      key={c.id}
-      className={css(
-        styles.commentWrapper,
-        !c.parent && styles.rootCommentWrapper
-      )}
-    >
-      <Comment comment={c} document={document} />
-    </div>
-  ));
+  const _commentElems = comments
+    .map((c) => (
+      <div
+        key={c.id}
+        className={css(
+          styles.commentWrapper,
+          !c.parent && styles.rootCommentWrapper
+        )}
+      >
+        <Comment comment={c} document={document} />
+      </div>
+    ))
+    // Removing bounty comment under proposals for post type grant
+    .slice(
+      document?.postType === "grant" && comments[0].bounties.length > 0 ? 1 : 0
+    );
 
   const loadedComments = comments;
   const loadMoreCount = totalCount - loadedComments.length;
