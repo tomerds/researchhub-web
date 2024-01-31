@@ -23,14 +23,12 @@ import { useRouter } from "next/router";
 import { DocumentMetadata } from "../Document/lib/types";
 
 export type GrantFundsCardProps = {
-  status: BOUNTY_STATUS;
   published: string;
   metadata: DocumentMetadata;
 };
 
 const GrantFundsCard = ({
   metadata,
-  status,
   published,
 }: GrantFundsCardProps): ReactElement => {
   const openBountyAmount = (metadata?.bounties || []).reduce(
@@ -38,7 +36,10 @@ const GrantFundsCard = ({
     0
   );
 
-  const grantorBounty = metadata.bounties[0].amount; // don't know if this is correct but assuming they are ordered by creation data, could check on id or createdBy
+  console.log(metadata);
+
+  const grantorBounty = metadata?.bounties[0]?.amount; // don't know if this is correct but assuming they are ordered by creation data, could check on id or createdBy
+  const status = metadata?.bounties[0]?.status;
 
   const barFillAmount = useMemo(
     () => Math.min((grantorBounty / openBountyAmount) * 100, 100),

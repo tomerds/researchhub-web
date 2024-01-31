@@ -307,10 +307,7 @@ const DocumentHeader = ({
               <div className={css(styles.fundraiseWrapper)}>
                 <GrantFundsCard
                   metadata={metadata}
-                  amount={1000}
-                  status={BOUNTY_STATUS.OPEN}
                   published={doc.createdDate}
-                  bountiesTotal={2000}
                 />
               </div>
             }
