@@ -3,7 +3,7 @@ import DocumentBadges from "./DocumentBadges";
 import DocumentLineItems from "./DocumentLineItems";
 import IconButton from "../Icons/IconButton";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
-import colors from "~/config/themes/colors";
+import colors, { bountyColors } from "~/config/themes/colors";
 import HorizontalTabBar from "~/components/HorizontalTabBar";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,6 +45,7 @@ import LinkToPublicPage from "../LinkToPublicPage";
 import { breakpoints } from "~/config/themes/screen";
 import GrantFundsCard from "../Grants/GrantFundsCard";
 import { BOUNTY_STATUS } from "~/config/types/bounty";
+import Badge from "../Badge";
 const PaperTransactionModal = dynamic(
   () => import("~/components/Modals/PaperTransactionModal")
 );
@@ -303,14 +304,30 @@ const DocumentHeader = ({
                 />
               </div>
             )}
-            {
-              <div className={css(styles.fundraiseWrapper)}>
-                <GrantFundsCard
-                  metadata={metadata}
-                  published={doc.createdDate}
-                />
-              </div>
-            }
+            {doc.postType === "grant" && (
+              <>
+                {metadata.bounties.length > 0 ? (
+                  <div className={css(styles.fundraiseWrapper)}>
+                    <GrantFundsCard
+                      metadata={metadata}
+                      published={doc.createdDate}
+                    />
+                  </div>
+                ) : (
+                  <div className={css(styles.badge)}>
+                    <span className={css(styles.icon, styles.rscIcon)}>
+                      <ResearchCoinIcon
+                        color={bountyColors.BADGE_TEXT}
+                        version={4}
+                        height={15}
+                        width={15}
+                      />
+                    </span>
+                    <span>Grant Closed</span>
+                  </div>
+                )}
+              </>
+            )}
             {!noHorizontalTabBar && (
               <div className={css(styles.tabsWrapper)}>
                 <HorizontalTabBar tabs={tabs} />
@@ -484,6 +501,29 @@ const styles = StyleSheet.create({
       background: colors.DARKER_GREY(0.2),
       transition: "0.2s",
     },
+  },
+  badge: {
+    display: "flex",
+    margin: "0px 10px 0px 0",
+    marginTop: "10px",
+    minWidth: "0",
+    maxWidth: "134px",
+    boxSizing: "border-box",
+    backgroundColor: bountyColors.BADGE_BACKGROUND,
+    borderRadius: "4px",
+    color: bountyColors.BADGE_TEXT,
+    padding: "5px 8px",
+    transition: ".3s ease-in-out",
+  },
+  icon: {
+    marginRight: 6,
+    fontSize: 13,
+    height: 18,
+  },
+  rscIcon: {
+    marginRight: 6,
+    height: "16px",
+    display: "flex",
   },
 });
 
