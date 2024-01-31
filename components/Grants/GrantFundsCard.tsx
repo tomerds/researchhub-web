@@ -144,61 +144,63 @@ const GrantFundsCard = ({
           )}
         />
       </div>
-      <div className={css(styles.statusWrapper)}>
-        {status === BOUNTY_STATUS.OPEN && (
-          <div className={css(styles.timeLeft)}>
-            <FontAwesomeIcon
-              style={{ fontSize: 14, marginRight: 5 }}
-              icon={faClock}
-            />
-            {timeTo(dayjs(published).add(30, "day"))} to go
-          </div>
-        )}
-        {status === BOUNTY_STATUS.CLOSED ||
-          (status === BOUNTY_STATUS.EXPIRED && (
-            <div className={css(styles.fundraiseCompletedDetail)}>
+      <div className={css(styles.footer)}>
+        <div className={css(styles.statusWrapper)}>
+          {status === BOUNTY_STATUS.OPEN && (
+            <div className={css(styles.timeLeft)}>
               <FontAwesomeIcon
                 style={{ fontSize: 14, marginRight: 5 }}
-                icon={faCircleCheck}
+                icon={faClock}
               />
-              Grant Completed
+              {timeTo(dayjs(published).add(30, "day"))} to go
             </div>
-          ))}
-      </div>
-      {isFetching ? null : (
-        <div className={css(styles.buttonWrapper)}>
-          <CreateBountyBtn
-            isGrant={true}
-            onBountyAdd={onUpdateBounty}
-            withPreview={false}
-            relatedItemId={comment.id}
-            relatedItemContentType={"rhcommentmodel"}
-            originalBounty={comment.bounties[0]}
-          >
-            <Button
-              // customButtonStyle={styles.contributeBtn}
-              // customLabelStyle={styles.contributeBtnLabel}
-              hideRipples={true}
-              size="small"
-            >
-              <div>
-                <FontAwesomeIcon icon={faPlus} />
-                {` `}
-
-                <>
-                  Add RSC
-                  <span
-                  // className={css(styles.bountyBtnText)}
-                  >
-                    {" "}
-                    to Grant
-                  </span>
-                </>
+          )}
+          {status === BOUNTY_STATUS.CLOSED ||
+            (status === BOUNTY_STATUS.EXPIRED && (
+              <div className={css(styles.fundraiseCompletedDetail)}>
+                <FontAwesomeIcon
+                  style={{ fontSize: 14, marginRight: 5 }}
+                  icon={faCircleCheck}
+                />
+                Grant Completed
               </div>
-            </Button>
-          </CreateBountyBtn>
+            ))}
         </div>
-      )}
+        {isFetching ? null : (
+          <div className={css(styles.buttonWrapper)}>
+            <CreateBountyBtn
+              isGrant={true}
+              onBountyAdd={onUpdateBounty}
+              withPreview={false}
+              relatedItemId={comment.id}
+              relatedItemContentType={"rhcommentmodel"}
+              originalBounty={comment.bounties[0]}
+            >
+              <Button
+                // customButtonStyle={styles.contributeBtn}
+                // customLabelStyle={styles.contributeBtnLabel}
+                hideRipples={true}
+                size="small"
+              >
+                <div>
+                  <FontAwesomeIcon icon={faPlus} />
+                  {` `}
+
+                  <>
+                    Add RSC
+                    <span
+                    // className={css(styles.bountyBtnText)}
+                    >
+                      {" "}
+                      to Grant
+                    </span>
+                  </>
+                </div>
+              </Button>
+            </CreateBountyBtn>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: "10px",
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
   },
   fundraiseCompletedDetail: {
     fontSize: 14,
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginTop: 10,
   },
   supporters: {

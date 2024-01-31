@@ -74,7 +74,16 @@ function CreateGrantForm({ post, user, onExit, hubId }: CreateGrantFormProps) {
   });
   const [mutableFormFields, setMutableFormFields] = useState<FormFields>({
     hubs: post?.hubs ?? [],
-    text: post?.postHtml ?? "",
+    text:
+      post?.postHtml ??
+      `
+    <h1>Description</h1><br />
+    <h1>Scope</h1><br />
+    <h1>Funding Information</h1><br />
+    <h1>Application Process</h1><br />
+    <h1>Timeline</h1><br />
+    <h1>Criteria</h1><br />
+    <h1>Conditions</h1><br />`,
     title: post?.title ?? "",
   });
   const [shouldDisplayError, setShouldDisplayError] = useState<boolean>(false);

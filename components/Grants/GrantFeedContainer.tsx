@@ -23,6 +23,7 @@ import fetchUnifiedDocs from "../UnifiedDocFeed/api/unifiedDocFetch";
 import { getSelectedUrlFilters } from "../UnifiedDocFeed/utils/getSelectedUrlFilters";
 import ResearchHubBanner from "~/components/ResearchHubBanner";
 import GrantInfoCard from "./GrantInfoCard";
+import EmptyGrantScreen from "./EmptyGrantScreen";
 const FeedInfoCard = dynamic(() => import("../UnifiedDocFeed/FeedInfoCard"), {
   ssr: false,
 });
@@ -183,7 +184,11 @@ function GrantFeedContainer({
             <ResearchHubBanner hub={{ name: "ResearchHub" }} />
           )}
           <FeedBlurWithButton />
-          {cards.length > 0 ? cards : <EmptyFeedScreen />}
+          {cards.length > 0 ? (
+            cards
+          ) : (
+            <EmptyGrantScreen hub={hub} userId={auth?.user?.id} />
+          )}
         </div>
       )}
       {unifiedDocsLoading || onMyHubsLoggedOut ? null : (
