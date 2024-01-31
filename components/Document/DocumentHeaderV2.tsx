@@ -310,6 +310,7 @@ const DocumentHeader = ({
                     <GrantFundsCard
                       metadata={metadata}
                       published={doc.createdDate}
+                      id={doc.id}
                     />
                   </div>
                 ) : (
