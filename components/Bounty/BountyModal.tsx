@@ -137,7 +137,7 @@ function BountyModal({
   };
 
   const handleAddBounty = () => {
-    if (!bountyType) {
+    if (!isGrant && !bountyType) {
       setMessage("Please select a bounty type before adding a bounty");
       showMessage({ show: true, error: true });
       return;
@@ -431,7 +431,9 @@ function BountyModal({
                       customLabelStyle={styles.addButtonLabel}
                       size={`small`}
                       disabled={hasMaxRscAlert || hasMinRscAlert}
-                      onClick={handleAddBounty}
+                      onClick={() => {
+                        handleAddBounty();
+                      }}
                     />
                   </div>
                 </div>

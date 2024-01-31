@@ -28,14 +28,17 @@ export type GrantFundsCardProps = {
   published: string;
   metadata: DocumentMetadata;
   id?: number;
+  onUpdateBounty: any;
 };
 
 const GrantFundsCard = ({
   metadata,
   published,
   id,
+  onUpdateBounty,
 }: GrantFundsCardProps): ReactElement => {
-  const [comment, setComment] = useState();
+  const [isFetching, setIsFetching] = useState(true);
+  const [comment, setComment] = useState<any>();
 
   useEffect(() => {
     const getComments = async () => {
@@ -52,7 +55,9 @@ const GrantFundsCard = ({
             new Date(b.createdDate).getTime()
         );
 
+      // probably needs a try statement
       setComment(comments[0]);
+      setIsFetching(false);
     };
 
     getComments();
@@ -62,8 +67,6 @@ const GrantFundsCard = ({
     (total, bounty) => bounty.amount + total,
     0
   );
-
-  const router = useRouter();
 
   const grantorBounty = metadata?.bounties[0]?.amount; // don't know if this is correct but assuming they are ordered by creation data, could check on id or createdBy
   const status = metadata?.bounties[0]?.status;
@@ -162,37 +165,40 @@ const GrantFundsCard = ({
             </div>
           ))}
       </div>
-      <div className={css(styles.buttonWrapper)}>
-        <CreateBountyBtn
-          onBountyAdd={() => router.reload()}
-          withPreview={false}
-          relatedItemId={comment.id}
-          relatedItemContentType={"rhcommentmodel"}
-          originalBounty={comment.bounties[0]}
-        >
-          <Button
-            // customButtonStyle={styles.contributeBtn}
-            // customLabelStyle={styles.contributeBtnLabel}
-            hideRipples={true}
-            size="small"
+      {isFetching ? null : (
+        <div className={css(styles.buttonWrapper)}>
+          <CreateBountyBtn
+            isGrant={true}
+            onBountyAdd={onUpdateBounty}
+            withPreview={false}
+            relatedItemId={comment.id}
+            relatedItemContentType={"rhcommentmodel"}
+            originalBounty={comment.bounties[0]}
           >
-            <div>
-              <FontAwesomeIcon icon={faPlus} />
-              {` `}
+            <Button
+              // customButtonStyle={styles.contributeBtn}
+              // customLabelStyle={styles.contributeBtnLabel}
+              hideRipples={true}
+              size="small"
+            >
+              <div>
+                <FontAwesomeIcon icon={faPlus} />
+                {` `}
 
-              <>
-                Add RSC
-                <span
-                // className={css(styles.bountyBtnText)}
-                >
-                  {" "}
-                  to Bounty
-                </span>
-              </>
-            </div>
-          </Button>
-        </CreateBountyBtn>
-      </div>
+                <>
+                  Add RSC
+                  <span
+                  // className={css(styles.bountyBtnText)}
+                  >
+                    {" "}
+                    to Grant
+                  </span>
+                </>
+              </div>
+            </Button>
+          </CreateBountyBtn>
+        </div>
+      )}
     </div>
   );
 };
