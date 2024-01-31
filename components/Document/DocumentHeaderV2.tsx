@@ -45,7 +45,6 @@ import LinkToPublicPage from "../LinkToPublicPage";
 import { breakpoints } from "~/config/themes/screen";
 import GrantFundsCard from "../Grants/GrantFundsCard";
 import { BOUNTY_STATUS } from "~/config/types/bounty";
-import Badge from "../Badge";
 const PaperTransactionModal = dynamic(
   () => import("~/components/Modals/PaperTransactionModal")
 );
