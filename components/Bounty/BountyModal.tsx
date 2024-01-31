@@ -431,9 +431,7 @@ function BountyModal({
                       customLabelStyle={styles.addButtonLabel}
                       size={`small`}
                       disabled={hasMaxRscAlert || hasMinRscAlert}
-                      onClick={() => {
-                        handleAddBounty();
-                      }}
+                      onClick={handleAddBounty}
                     />
                   </div>
                 </div>
