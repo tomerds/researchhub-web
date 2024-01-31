@@ -3,7 +3,7 @@ import DocumentBadges from "./DocumentBadges";
 import DocumentLineItems from "./DocumentLineItems";
 import IconButton from "../Icons/IconButton";
 import ResearchCoinIcon from "../Icons/ResearchCoinIcon";
-import colors, { bountyColors } from "~/config/themes/colors";
+import colors from "~/config/themes/colors";
 import HorizontalTabBar from "~/components/HorizontalTabBar";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -317,7 +317,7 @@ const DocumentHeader = ({
                   <div className={css(styles.badge)}>
                     <span className={css(styles.icon, styles.rscIcon)}>
                       <ResearchCoinIcon
-                        color={bountyColors.BADGE_TEXT}
+                        color={colors.RED_DARK(0.8)}
                         version={4}
                         height={15}
                         width={15}
@@ -509,9 +509,9 @@ const styles = StyleSheet.create({
     minWidth: "0",
     maxWidth: "134px",
     boxSizing: "border-box",
-    backgroundColor: bountyColors.BADGE_BACKGROUND,
+    backgroundColor: colors.RED_DARK(0.1),
     borderRadius: "4px",
-    color: bountyColors.BADGE_TEXT,
+    color: colors.RED_DARK(0.8),
     padding: "5px 8px",
     transition: ".3s ease-in-out",
   },
