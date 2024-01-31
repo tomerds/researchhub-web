@@ -70,6 +70,7 @@ import { Fundraise, parseFundraise } from "~/components/Fundraise/lib/types";
 import FundraiseCard from "~/components/Fundraise/FundraiseCard";
 import { timeTo } from "~/config/utils/dates";
 import dayjs from "dayjs";
+import ResearchCoinIcon from "~/components/Icons/ResearchCoinIcon";
 
 const DocumentViewer = dynamic(
   () => import("~/components/Document/DocumentViewer")
@@ -349,7 +350,7 @@ function FeedCard({
                             {grant ? "Posted: " : ""}
                             {parsedDoc?.createdDate}
 
-                            {grant ? (
+                            {grant && hasActiveBounty ? (
                               <>
                                 <br />
                                 Grant Expiring:{" "}
@@ -448,6 +449,19 @@ function FeedCard({
                           badgeOverride={styles.badge}
                         />
                       </div>
+                      {!hasActiveBounty && grant && (
+                        <div className={css(styles.badgeClosed)}>
+                          <span className={css(styles.icon, styles.rscIcon)}>
+                            <ResearchCoinIcon
+                              color={colors.RED_DARK(0.8)}
+                              version={4}
+                              height={15}
+                              width={15}
+                            />
+                          </span>
+                          <span>Grant Closed</span>
+                        </div>
+                      )}
                       {hasActiveBounty && (
                         <ContentBadge
                           badgeOverride={styles.badge}
@@ -866,6 +880,27 @@ const styles = StyleSheet.create({
     verticalAlign: "middle",
   },
   padding16: { padding: 16 },
+  badgeClosed: {
+    display: "flex",
+    margin: "0px 10px 0px 0",
+    minWidth: "0",
+    maxWidth: "134px",
+    fontSize: "14px",
+    boxSizing: "border-box",
+    backgroundColor: colors.RED_DARK(0.1),
+    borderRadius: "50px",
+    ":hover": {
+      borderRadius: 5,
+    },
+    color: colors.RED_DARK(0.8),
+    padding: "5px 8px",
+    transition: ".3s ease-in-out",
+  },
+  icon: {
+    marginRight: 6,
+    fontSize: 13,
+    height: 18,
+  },
 });
 
 const mapStateToProps = (state) => ({

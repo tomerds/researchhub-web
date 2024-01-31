@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo } from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Fundraise, isFundraiseFulfilled } from "./lib/types";
 import { css, StyleSheet } from "aphrodite";
 import colors from "~/config/themes/colors";
@@ -21,16 +21,42 @@ import { breakpoints } from "~/config/themes/screen";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { DocumentMetadata } from "../Document/lib/types";
+import { fetchCommentsAPI } from "../Comment/lib/api";
 
 export type GrantFundsCardProps = {
   published: string;
   metadata: DocumentMetadata;
+  id?: number;
 };
 
 const GrantFundsCard = ({
   metadata,
   published,
+  id,
 }: GrantFundsCardProps): ReactElement => {
+  const [comment, setComment] = useState();
+
+  useEffect(() => {
+    const getComments = async () => {
+      const { comments } = await fetchCommentsAPI({
+        documentId: id,
+        documentType: "researchhubpost",
+      });
+
+      comments
+        .filter((c) => c.bounties.length > 0)
+        .sort(
+          (a, b) =>
+            new Date(a.createdDate).getTime() -
+            new Date(b.createdDate).getTime()
+        );
+
+      setComment(comments[0]);
+    };
+
+    getComments();
+  }, []);
+
   const openBountyAmount = (metadata?.bounties || []).reduce(
     (total, bounty) => bounty.amount + total,
     0
