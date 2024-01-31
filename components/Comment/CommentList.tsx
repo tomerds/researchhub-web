@@ -31,6 +31,8 @@ const CommentList = ({
 }: Args) => {
   const commentTreeState = useContext(CommentTreeContext);
   const _commentElems = comments
+    // Removing bounty comment under proposals for post type grant
+    .filter((c) => document?.postType !== "grant" || c.bounties.length === 0)
     .map((c) => (
       <div
         key={c.id}
@@ -41,11 +43,7 @@ const CommentList = ({
       >
         <Comment comment={c} document={document} />
       </div>
-    ))
-    // Removing bounty comment under proposals for post type grant
-    .slice(
-      document?.postType === "grant" && comments[0].bounties.length > 0 ? 1 : 0
-    );
+    ));
 
   const loadedComments = comments;
   const loadMoreCount = totalCount - loadedComments.length;

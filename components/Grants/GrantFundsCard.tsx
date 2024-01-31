@@ -36,8 +36,6 @@ const GrantFundsCard = ({
     0
   );
 
-  console.log(metadata);
-
   const grantorBounty = metadata?.bounties[0]?.amount; // don't know if this is correct but assuming they are ordered by creation data, could check on id or createdBy
   const status = metadata?.bounties[0]?.status;
 
