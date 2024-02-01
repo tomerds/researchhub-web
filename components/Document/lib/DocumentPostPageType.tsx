@@ -46,7 +46,9 @@ const DocumentPostPageType: NextPage<Args> = ({
   const { revalidateDocument } = useCacheControl();
   const documentType = "post";
   const isQuestion = documentData?.document_type === "QUESTION";
-  const isGrant = documentData?.document_type === "GRANT";
+  const [isGrant, setIsGrant] = useState(
+    documentData?.document_type === "GRANT" || false
+  );
 
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
@@ -70,6 +72,10 @@ const DocumentPostPageType: NextPage<Args> = ({
   useEffect(() => {
     setPostHtml(postHtml);
   }, [postHtml]);
+
+  useEffect(() => {
+    if (document?.postType === "grant") setIsGrant(true);
+  }, [document]);
 
   if (router.isFallback) {
     return <DocumentPagePlaceholder />;
