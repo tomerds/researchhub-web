@@ -1,4 +1,4 @@
-import Quill from "quill";
+import Quill, { Delta } from "quill";
 import { useEffect } from "react";
 import { commentTypes, reviewCategories } from "../lib/options";
 import {
@@ -10,6 +10,7 @@ import {
   focusEditor,
 } from "../lib/quill";
 import { COMMENT_TYPES } from "../lib/types";
+import { comment } from "~/redux/discussion/shims";
 
 function useEffectForCommentTypeChange({
   commentType,
@@ -47,6 +48,44 @@ function useEffectForCommentTypeChange({
         quill,
         quillRef,
       });
+    } else if (commentType === COMMENT_TYPES.PROPOSAL) {
+      // HAM 01/29/24:
+      // This else if block can't be the best way to do this but works for now
+      // Was modelling off of REVIEW block from above combined with quill docs
+
+      quillRef.current.classList.remove("peer-review");
+      quillRef.current.classList.add("proposal");
+
+      if (!hasQuillContent({ quill })) {
+        const delta: any = {
+          ops: [
+            { insert: "Proposal Title:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            { insert: "Introduction:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            { insert: "Materials/Methods:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            { insert: "Budget:", attributes: { bold: true } },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+            {
+              insert: "Other:",
+              attributes: { bold: true },
+            },
+            { insert: " ", attributes: { bold: false } },
+            { insert: "\n\n" },
+          ],
+        };
+        quill.setContents(delta);
+      }
+
+      const trimmedContents = trimQuillEditorContents({
+        contents: quill.getContents(),
+      });
+      quill.setContents(trimmedContents);
     } else {
       quillRef.current.classList.remove("peer-review");
       const contents = quill.getContents();

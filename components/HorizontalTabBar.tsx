@@ -93,7 +93,7 @@ const HorizontalTabBar = ({
         tabStyle
       ),
       ...(href && { href }),
-      ...(isExternal && { target: "_blank" }),      
+      ...(isExternal && { target: "_blank" }),
       ...(onClick && { onClick: () => onClick(tab, index) }),
     };
 
@@ -128,7 +128,10 @@ const HorizontalTabBar = ({
   return (
     <div className={css(styles.container, containerStyle)}>
       <div className={css(styles.arrowWrapper)}>
-        <div className={css(styles.tabContainer, tabContainerStyle)} ref={tabContainerEl}>
+        <div
+          className={css(styles.tabContainer, tabContainerStyle)}
+          ref={tabContainerEl}
+        >
           {tabs.map(renderTab)}
         </div>
         {showRightArrow && (

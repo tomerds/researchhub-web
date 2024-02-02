@@ -60,7 +60,11 @@ function RscBalanceHistoryDropContentCard({
       title = withdrawal.source?.purchase_type
         ?.replaceAll("_", " ")
         .toLocaleLowerCase();
+    } else if (withdrawal.source.distribution_type === "STORED_PAPER_POT") {
+      // HAM 01/31/24: Temporary Fix for Grant Payout Title in RSC History
+      title = "Grant Awarded";
     }
+
     return toTitleCase(title);
   };
   const displayTitle = getTitle();

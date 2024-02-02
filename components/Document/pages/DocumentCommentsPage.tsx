@@ -23,6 +23,8 @@ const getEditorTypeFromTabName = (tabName: string): COMMENT_TYPES => {
   switch (tabName) {
     case "reviews":
       return COMMENT_TYPES.REVIEW;
+    case "proposals":
+      return COMMENT_TYPES.PROPOSAL;
     case "bounties":
     case "conversation":
     default:

@@ -42,6 +42,7 @@ type Props = {
   relatedItemContentType?: string;
   showMessage: Function;
   setMessage: Function;
+  isGrant?: boolean;
 };
 
 function BountyModal({
@@ -55,6 +56,7 @@ function BountyModal({
   originalBounty,
   relatedItemContentType,
   addBtnLabel = "Add Bounty",
+  isGrant = false,
 }: Props): ReactElement {
   useEffect(() => {
     ReactTooltip.rebuild();
@@ -135,7 +137,7 @@ function BountyModal({
   };
 
   const handleAddBounty = () => {
-    if (!bountyType) {
+    if (!isGrant && !bountyType) {
       setMessage("Please select a bounty type before adding a bounty");
       showMessage({ show: true, error: true });
       return;
@@ -233,31 +235,39 @@ function BountyModal({
             <div className={css(styles.rootContainer)}>
               <div className={css(styles.values)}>
                 <div className={css(styles.offeringLine)}>
-                  <div
-                    className={css(styles.lineItemText, styles.offeringText)}
-                  >
-                    What type of bounty do you want to create?
-                  </div>
-                  <div className={css(styles.bountyTypes)}>
-                    {COMMENT_TYPE_OPTIONS.map(
-                      ({ value, label, icon }, index) => {
-                        return (
-                          <div
-                            className={css(
-                              styles.bountyTypeBadge,
-                              value === bountyType && styles.bountyBadgeActive
-                            )}
-                            onClick={() => setBountyType(value)}
-                          >
-                            <span className={css(styles.bountyTypeIcon)}>
-                              {icon}
-                            </span>
-                            {label}
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
+                  {isGrant ? null : (
+                    <div>
+                      <div
+                        className={css(
+                          styles.lineItemText,
+                          styles.offeringText
+                        )}
+                      >
+                        What type of bounty do you want to create?
+                      </div>
+                      <div className={css(styles.bountyTypes)}>
+                        {COMMENT_TYPE_OPTIONS.map(
+                          ({ value, label, icon }, index) => {
+                            return (
+                              <div
+                                className={css(
+                                  styles.bountyTypeBadge,
+                                  value === bountyType &&
+                                    styles.bountyBadgeActive
+                                )}
+                                onClick={() => setBountyType(value)}
+                              >
+                                <span className={css(styles.bountyTypeIcon)}>
+                                  {icon}
+                                </span>
+                                {label}
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   <div className={css(styles.lineItem, styles.offeringLine)}>
                     <div

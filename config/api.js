@@ -713,7 +713,7 @@ const routes = (BASE_URL) => {
       return url;
     },
 
-    HUB: ({ hubId, search, name, slug, ordering, page }) => {
+    HUB: ({ hubId, search, name, slug, ordering, page, category }) => {
       let url = BASE_URL + `hub/`;
 
       if (hubId) {
@@ -740,6 +740,10 @@ const routes = (BASE_URL) => {
 
       if (page) {
         url += `page=${page}&`;
+      }
+
+      if (category) {
+        url += `category=${category}&`;
       }
 
       return url;

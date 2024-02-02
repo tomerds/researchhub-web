@@ -43,6 +43,8 @@ import DocumentPageTutorial from "./lib/DocumentPageTutorial";
 import FundraiseCard from "../Fundraise/FundraiseCard";
 import LinkToPublicPage from "../LinkToPublicPage";
 import { breakpoints } from "~/config/themes/screen";
+import GrantFundsCard from "../Grants/GrantFundsCard";
+import { BOUNTY_STATUS } from "~/config/types/bounty";
 const PaperTransactionModal = dynamic(
   () => import("~/components/Modals/PaperTransactionModal")
 );
@@ -164,7 +166,6 @@ const DocumentHeader = ({
                     slug={doc?.raw?.slug}
                   />
                 </div>
-
                 {!noLineItems && (
                   <div
                     className={css(
@@ -181,7 +182,11 @@ const DocumentHeader = ({
                       />
                     </ReferenceProjectsUpsertContextProvider>
                     {/* Don't show "Tip" if it's a preregistration */}
-                    {!(isPost(doc) && doc.postType === "preregistration") && (
+                    {!(
+                      isPost(doc) &&
+                      (doc.postType === "preregistration" ||
+                        doc.postType === "grant")
+                    ) && (
                       <PermissionNotificationWrapper
                         modalMessage="edit document"
                         permissionKey="UpdatePaper"
@@ -236,7 +241,11 @@ const DocumentHeader = ({
               {!noLineItems && (
                 <div className={css(styles.actionWrapper)}>
                   {/* Don't show "Tip" if it's a preregistration */}
-                  {!(isPost(doc) && doc.postType === "preregistration") && (
+                  {!(
+                    isPost(doc) &&
+                    (doc.postType === "preregistration" ||
+                      doc.postType === "grant")
+                  ) && (
                     <PermissionNotificationWrapper
                       modalMessage="edit document"
                       permissionKey="UpdatePaper"
@@ -294,6 +303,40 @@ const DocumentHeader = ({
                 />
               </div>
             )}
+            {doc.postType === "grant" && (
+              <>
+                {metadata.bounties.length > 0 ? (
+                  <div className={css(styles.fundraiseWrapper)}>
+                    <GrantFundsCard
+                      metadata={metadata}
+                      published={doc.createdDate}
+                      id={doc.id}
+                      onUpdateBounty={(bounty) => {
+                        console.log("here", metadata.bounties);
+                        documentContext.updateMetadata({
+                          ...metadata,
+                          bounties: [...metadata.bounties, bounty],
+                        });
+
+                        revalidateDocument();
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className={css(styles.badge)}>
+                    <span className={css(styles.icon, styles.rscIcon)}>
+                      <ResearchCoinIcon
+                        color={colors.RED_DARK(0.8)}
+                        version={4}
+                        height={15}
+                        width={15}
+                      />
+                    </span>
+                    <span>Grant Closed</span>
+                  </div>
+                )}
+              </>
+            )}
             {!noHorizontalTabBar && (
               <div className={css(styles.tabsWrapper)}>
                 <HorizontalTabBar tabs={tabs} />
@@ -301,7 +344,6 @@ const DocumentHeader = ({
             )}
           </div>
         </div>
-
         <PaperTransactionModal
           // @ts-ignore
           paper={isPaper(doc) ? doc.raw : undefined}
@@ -468,6 +510,29 @@ const styles = StyleSheet.create({
       background: colors.DARKER_GREY(0.2),
       transition: "0.2s",
     },
+  },
+  badge: {
+    display: "flex",
+    margin: "0px 10px 0px 0",
+    marginTop: "10px",
+    minWidth: "0",
+    maxWidth: "134px",
+    boxSizing: "border-box",
+    backgroundColor: colors.RED_DARK(0.1),
+    borderRadius: "4px",
+    color: colors.RED_DARK(0.8),
+    padding: "5px 8px",
+    transition: ".3s ease-in-out",
+  },
+  icon: {
+    marginRight: 6,
+    fontSize: 13,
+    height: 18,
+  },
+  rscIcon: {
+    marginRight: 6,
+    height: "16px",
+    display: "flex",
   },
 });
 

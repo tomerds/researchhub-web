@@ -48,7 +48,10 @@ import VoteWidget from "~/components/VoteWidget";
 import { createVoteHandler } from "~/components/Vote/utils/createVoteHandler";
 import { unescapeHtmlString } from "~/config/utils/unescapeHtmlString";
 import { RESEARCHHUB_POST_DOCUMENT_TYPES } from "~/config/utils/getUnifiedDocType";
-import Bounty, { formatBountyAmount } from "~/config/types/bounty";
+import Bounty, {
+  BOUNTY_STATUS,
+  formatBountyAmount,
+} from "~/config/types/bounty";
 import ContentBadge from "~/components/ContentBadge";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -65,6 +68,9 @@ import { parseHub } from "~/config/types/hub";
 import DocumentHubs from "~/components/Document/lib/DocumentHubs";
 import { Fundraise, parseFundraise } from "~/components/Fundraise/lib/types";
 import FundraiseCard from "~/components/Fundraise/FundraiseCard";
+import { timeTo } from "~/config/utils/dates";
+import dayjs from "dayjs";
+import ResearchCoinIcon from "~/components/Icons/ResearchCoinIcon";
 
 const DocumentViewer = dynamic(
   () => import("~/components/Document/DocumentViewer")
@@ -189,6 +195,8 @@ function FeedCard({
   const feDocUrl = `/${
     formattedDocType === "question"
       ? "question"
+      : formattedDocType === "grant"
+      ? "grant"
       : RESEARCHHUB_POST_DOCUMENT_TYPES.includes(formattedDocType ?? "")
       ? "post"
       : formattedDocType
@@ -278,6 +286,8 @@ function FeedCard({
   const bountyAmount = documentFilter?.bounty_total_amount;
   const hasActiveBounty = documentFilter?.bounty_open;
 
+  const grant = formattedDocType === "grant";
+
   return (
     <div
       className={css(
@@ -337,7 +347,18 @@ function FeedCard({
                             {authors?.length > 0 && (
                               <span className={css(styles.metaDivider)}></span>
                             )}
+                            {grant ? "Posted: " : ""}
                             {parsedDoc?.createdDate}
+
+                            {grant && hasActiveBounty ? (
+                              <>
+                                <br />
+                                Grant Expiring:{" "}
+                                {timeTo(dayjs(created_date).add(30, "day"))}
+                              </>
+                            ) : (
+                              <></>
+                            )}
                           </>
                         )}
                       </div>
@@ -381,6 +402,7 @@ function FeedCard({
                       />
                     </div>
                   )}
+
                   <div className={css(styles.metadataContainer, styles.mobile)}>
                     <DocumentHubs
                       hubs={parsedHubs}
@@ -427,6 +449,19 @@ function FeedCard({
                           badgeOverride={styles.badge}
                         />
                       </div>
+                      {!hasActiveBounty && grant && (
+                        <div className={css(styles.badgeClosed)}>
+                          <span className={css(styles.icon, styles.rscIcon)}>
+                            <ResearchCoinIcon
+                              color={colors.RED_DARK(0.8)}
+                              version={4}
+                              height={15}
+                              width={15}
+                            />
+                          </span>
+                          <span>Grant Closed</span>
+                        </div>
+                      )}
                       {hasActiveBounty && (
                         <ContentBadge
                           badgeOverride={styles.badge}
@@ -845,6 +880,27 @@ const styles = StyleSheet.create({
     verticalAlign: "middle",
   },
   padding16: { padding: 16 },
+  badgeClosed: {
+    display: "flex",
+    margin: "0px 10px 0px 0",
+    minWidth: "0",
+    maxWidth: "134px",
+    fontSize: "14px",
+    boxSizing: "border-box",
+    backgroundColor: colors.RED_DARK(0.1),
+    borderRadius: "50px",
+    ":hover": {
+      borderRadius: 5,
+    },
+    color: colors.RED_DARK(0.8),
+    padding: "5px 8px",
+    transition: ".3s ease-in-out",
+  },
+  icon: {
+    marginRight: 6,
+    fontSize: 13,
+    height: 18,
+  },
 });
 
 const mapStateToProps = (state) => ({

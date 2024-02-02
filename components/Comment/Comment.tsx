@@ -394,7 +394,8 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
                           style={{ fontSize: 13, marginRight: 5 }}
                           icon={faClock}
                         />
-                        {`Bounty expiring in ` +
+                        {`Bounty ` +
+                          `expiring in ` +
                           timeTo(openBounties[0].expiration_date) +
                           `.  `}
                       </span>
@@ -432,7 +433,7 @@ const Comment = ({ comment, document, ignoreChildren }: CommentArgs) => {
                                 )}
                               >
                                 {" "}
-                                to bounty
+                                to Bounty
                               </span>
                             </>
                           </div>

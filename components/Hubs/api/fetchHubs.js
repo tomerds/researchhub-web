@@ -24,6 +24,25 @@ export const getHubs = async ({
     });
 };
 
+export const getGrants = async ({}) => {
+  const url = API.HUB({ category: 11 });
+
+  return fetch(url, API.GET_CONFIG())
+    .then(Helpers.checkStatus)
+    .then(Helpers.parseJSON)
+    .then(async (resp) => {
+      return {
+        count: resp.count,
+        next: resp.next,
+        previous: resp.previous,
+        hubs: resp.results,
+      };
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 export const getCategories = () => {
   return fetch(API.GET_HUB_CATEGORIES(), API.GET_CONFIG())
     .then(Helpers.checkStatus)
