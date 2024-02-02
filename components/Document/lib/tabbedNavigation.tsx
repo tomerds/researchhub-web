@@ -187,7 +187,10 @@ const withPillContent = ({
     } else if (tab.value === "conversation") {
       finalTabs.push({
         ...tab,
-        pillContent: metadata.discussionCount || undefined,
+        pillContent:
+          document.postType === "grant"
+            ? undefined
+            : metadata.discussionCount || undefined,
       });
     } else if (tab.value === "bounties") {
       finalTabs.push({
